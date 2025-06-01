@@ -1,0 +1,65 @@
+################################################################################
+# ---------------------------------------------------------------------------- #
+# Header                                                                       #
+# ---------------------------------------------------------------------------- #
+# This file contains all of the relevant information regarding the formatting  #
+# for my documentation files.                                                  #
+#                                                                              #
+# NOTES:                                                                       #
+# In order to show .documentation syntax highlighting, set                     #
+#   "filetype plugin indent on" and "syntax on" either in Vim or in .vimrc     #
+# and copy ftdetect and syntax folders to                                      #
+#   '~/.config/vim/'                                                           #
+# In order to refresh syntax highlighting in Vim, use                          #
+#   "CTRL + L"                                                                 #
+# In order to append section ~section~ to ~file~, use                          #
+#   "cat .formatting/sections/~section~.documentation >> ~file~"               #
+# ---------------------------------------------------------------------------- #
+################################################################################
+
+O==============================================================================O
+#                                                                              #
+# TableOfContents                                                              #
+#                                                                              #
+O==============================================================================O
+
+  1. Heading
+  1.1. Subheading1
+  1.1.1. Subheading2
+  1.1.1.1. Subheading3
+  1.2. Subheading1
+  1.2.1. Subheading2
+  1.2.1.1. Subheading3
+
+#==============================================================================#
+#                                                                              #
+# 1. Heading                                                                   #
+#                                                                              #
+#==============================================================================#
+
+This contains information about Section 1.
+
+#=== 1.1. Subheading1 ===#
+
+This contains *bold* information about Section 1.1.
+
+#=== 1.1.1. Subheading2 ===#
+
+This contains ~italic~ information about Section 1.1.1.
+
+#=== 1.1.1.1. Subheading3 ===#
+
+This contains _underlined_ information about Section 1.1.1.1.
+
+#=== 1.2. Subheading1 ===#
+
+This contains 'single quoted' information about Section 1.2.
+
+#=== 1.2.1. Subheading2 ===#
+
+This contains "double quoted" information about Section 1.2.1.
+
+#=== 1.2.1.1. Subheading3 ===#
+
+- This contains list information about Section 1.2.1.1.
+  > This contains additional list information about Section 1.2.1.1.
