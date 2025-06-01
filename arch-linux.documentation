@@ -1,0 +1,938 @@
+################################################################################
+# ---------------------------------------------------------------------------- #
+# arch-linux.documentation                                                     #
+# ---------------------------------------------------------------------------- #
+# This file contains all of the relevant information regarding Arch Linux.     #
+# ---------------------------------------------------------------------------- #
+################################################################################
+
+O==============================================================================O
+#                                                                              #
+# Table Of Contents                                                            #
+#                                                                              #
+O==============================================================================O
+
+  0. Document Styling
+  1. Arch Linux
+  1.1. Principles
+  2. Pre-Installation
+  2.1. Installation Image and Live Environment
+  2.1.1. Acquire and Prepare Installation
+  2.1.2. Boot to Arch Linux Live Environment
+  2.2. Console Keyboard Layout and Font
+  2.2.1. Console Keyboard Layout
+  2.2.2. Console Font
+  2.3. Verify Boot Mode
+  2.4. Connect to the Internet
+  2.4.1. Network Interfaces
+  2.4.2. Network Devices
+  2.4.3. Connect to a Network
+  2.4.4. Managing Networks
+  2.5. System Clock
+  2.6. Disk Partitioning
+  2.6.1. Partition Disks
+  2.6.2. Format Partitions
+  2.6.3. Mount Partitions
+  3. Installation
+  3.1. Mirrors
+  3.2. Essential Packages
+  4. Configuration
+  4.1 Fstab
+  4.2 Change Root into New System
+  4.3 Set Time Zone
+  4.3.1. Network Time Protocol
+  4.4. Localization
+  4.5. Network Configuration
+  4.6. Root Password
+  4.7. Install Bootloader
+  4.8. Reboot
+  5. Post-Installation
+  5.1. System Administration
+  5.1.1. Users and Groups
+  5.1.1.1. Superuser
+  5.1.1.2. Users
+  5.1.1.3. Groups
+  5.1.1.4. Privilege Elevation
+  5.1.2. Permissions
+  5.1.2.1. Symbolic Representation
+  5.1.2.2. Numeric Representation
+  5.1.2.3. Default Permissions
+  5.1.3. Service Management
+  5.1.4. System Maintenance
+  5.1.4.1. Check For Errors
+  5.1.4.2. Backup
+  5.2. Package Management
+  5.2.1. Pacman
+  5.2.2. Mirrors
+  5.2.3. Arch Build System
+  5.2.3.1. Arch User Repository
+  5.3. Graphical User Interface
+  5.3.1. Display Servers
+  5.3.2. Desktop Environments
+  5.3.2.1. Window Managers
+  5.3.3. Display Managers
+  5.4. Multimedia
+  5.5. Console Improvements
+
+#==============================================================================#
+#                                                                              #
+# 0. Document Styling                                                          #
+#                                                                              #
+#==============================================================================#
+
+  *Bold* means it is important
+  ~Italic~ means to replace with respective name/device/etc.
+  'path/to/directory' means path
+  "keywords" means keywords or links
+  - means bullet point
+  > means following is a command for terminal
+
+#==============================================================================#
+#                                                                              #
+# 1. Arch Linux                                                                #
+#                                                                              #
+#==============================================================================#
+
+Arch Linux is an independently developed, x86-64 general-purpose GNU/Linux
+distribution that strives to provide the latest stable versions of most software
+by following a rolling-release model. The default installation is a minimal base
+system, configured by the user to only add what is purposely required.
+
+Visit "https://wiki.archlinux.org/title/Arch_Linux" for more information
+
+#=== 1.1. Principles ===#
+
+- Simplicity
+- Modernity
+- Pragmatism
+- User Centrality
+- Versatility
+
+#==============================================================================#
+#                                                                              #
+# 2. Pre-Installation                                                          #
+#                                                                              #
+#==============================================================================#
+
+This section highlights the prerequisites for installation of the new Arch Linux
+system.
+
+Arch Linux should run on any x86_64-compatible machine with a minimum of 512 MiB
+RAM, though more memory is needed to boot the live system of installation. A
+basic installation should take less than 2 GiB of disk space. It is also assumed
+that a working internet connection is available.
+
+#=== 2.1. Installation Image and Live Environment ===#
+
+#=== 2.1.1. Acquire and Prepare Installation ===#
+
+Go to "https:/archlinux.org/download/" and choose a mirror to download an Arch
+Linux image. The desired file will have the name:
+"archlinux-YYYY.MM.DD-x86_64.iso"
+
+Download Rufus to write ISO to USB Drive. Select the Arch Linux ISO and the USB
+Drive while keeping all other settings as default. Click start to install ISO to
+the USB Drive.
+
+#=== 2.1.2. Boot to Arch Linux Live Environment ===#
+
+Insert the USB Drive with the Arch Linux ISO installed into the machine you want
+to install Arch Linux on. Go into BIOS and set the Arch Linux USB Drive as the
+primary boot device. Make sure to disable Secure Boot as Arch Linux installation
+images do not support it. Since an ISO image is used, select "Arch Linux install
+medium" in the bootloader.
+
+#=== 2.2. Console Keyboard Layout and Font ===#
+
+#=== 2.2.1. Console Keyboard Layout ===#
+US/QWERTY is the default layout for Arch Linux.
+
+- List all available layouts
+	> localectl list-keymaps
+- Set keyboard layout to ~layout~
+	> loadkeys ~layout~
+
+#=== 2.2.2. Console Font ===#
+Fonts are located in '/usr/share/kbd/consolefonts/'.
+- Set console font to ~font~
+	> setfont ~font~
+
+#=== 2.3. Verify Boot Mode ===#
+
+Check UEFI bitness to verify boot mode.
+
+> cat '/sys/firmware/efi/fw_platform_size'
+	- 64-bit x64 UEFI returns "64"
+	- 32-bit IA32 UEFI returns "32"
+	- No such file or directory means system may be booted into BIOS (or CSM)
+	  mode
+
+#=== 2.4. Connect to the Internet ===#
+
+To connect to the internet, a network interface must be used to connect
+manually. The Arch Linux Live Environment comes with "iwctl" to initiate this
+connection the first time.
+
+#=== 2.4.1. Network Interfaces ===#
+
+- Show network interfaces
+	> ip link
+- List blocked interfaces
+	> rfkill
+- Unblock interface
+	> rfkill unblock ~interface~
+
+#=== 2.4.2. Network Devices ===#
+
+Devices starting with "w" represent wifi devices and devices starting with "e"
+represent ethernet devices.
+
+*Note*: All of the following commands must be preceded by iwctl if ran outside of
+the iwctl interactive terminal.
+
+- Show devices
+	> device list
+- Turn on ~device~ if powered off
+	> device ~device~ set-property Powered on
+- Show details of ~device~
+	> device ~device~ show
+
+#=== 2.4.3. Connect to a Network ===#
+
+The easiest way to connect to a network is using the interactive prompt provided
+by iwctl. In this interactive prompt, you can perform network commands per
+device to set it up correctly.
+
+*Note*: Keep this section on hand because this may need to be used again on new
+installation depending on if a network manager is used.
+
+- Enter interactive prompt
+	> iwctl
+- Scan for networks with ~device~
+	> station ~device~ scan
+		- Results in no output
+- Show list of networks that were discovered by ~device~ during above command
+	> station ~device~ get-networks
+- Connect ~device~ to ~SSID~
+	> station ~device~ connect ~SSID~
+		- Should be prompted to enter password if required
+- Show connection state of ~device~
+	> station ~device~ show
+- Disconnect ~device~ from network
+	> station ~device~ disconnect
+- List networks connected to previously
+	> known-networks list
+- Forget network with ~SSID~
+	> known-networks ~SSID~ forget
+- Verify internet connection with ping
+	> ping archlinux.org
+
+#=== 2.4.4. Managing Networks ===#
+
+The IWD Service is a daemon that runs in the background. Starting/enabling the
+service allows the IWD Service to run on boot. This service manages setting up
+a network connection in the background.
+
+- Start iwd.service
+	> systemctl start iwd.service
+- Enable iwd.service to start at boot
+	> systemctl enable iwd.service
+
+#=== 2.5. System Clock ===#
+
+The Arch Linux live environment has "systemd-timesyncd" enabled by default, thus
+time will be synced automatically once a connection to the internet is
+established.
+
+- Verify clock system is synchronized
+	> timedatectl
+
+#=== 2.6. Disk Partitioning ===#
+
+"Disks" are a physical storage device that contain "partitions", or sections of
+storage, that are then "mounted" to the Linux kernel.
+
+#=== 2.6.1. Partition Disks ===#
+
+There are two required partitions for Arch Linux:
+
+- "EFI" for booting in UEFI mode
+- "root" for the root directory ('/')
+
+There is an optional "swap" partition that is used for swap space. Swap space is
+essentially used to extend the virtual memory beyond the installed physical
+memory.
+
+Disks (block devices) will have the format similar to '/dev/sda', '/dev/sdb'.
+Partitions will have the format similar to '/dev/sda1', '/dev/sda2'.
+
+- List partition tables for block devices
+	> fdisk -l
+- Opens fdisk interactive prompt to format partition tables for ~disk~
+	> fdisk ~disk~
+
+*Note*: In the fdisk interactive prompt partitioning, it is possible to put
+labels on partitions to use instead of UUIDs.
+
+_Example layout for Lenovo Thinkpad G500_
+|-------------|-----------|----------------------|--------|-------------|
+| Mount Point | Partition |    Partition Type    |  Size  | File System |
+|-------------|-----------|----------------------|--------|-------------|
+|   /boot     | /dev/sda1 | EFI System Partition | =1 GiB |    FAT32    |
+|   [SWAP]    | /dev/sda2 | Linux Swap           | =8 GiB |    SWAP     |
+|   /         | /dev/sda3 | Linux x86-64 Root    |  Rest  |    Ext4     |
+|-------------|-----------|----------------------|--------|-------------|
+
+#=== 2.6.2. Format Partitions ===#
+
+Format each partition to their respective file system.
+
+- Format ~partition~ to FAT32
+	> mkfs.fat -F 32 ~partition~
+- Format ~partition~ to SWAP
+	> mkswap ~partition~
+- Format ~partition~ to Ext4
+	> mkfs.ext4 ~partition~
+
+#=== 2.6.3. Mount Partitions ===#
+
+Mount each partition to their respective mount point.
+
+*Note*: Mount points are preceded by '/mnt' when mounting
+
+- Mount ~partition~ to the ~mount-point~
+	> mount [--mkdir] ~partition~ ~mount-point~
+		- Optional [--mkdir] flag makes directory if it does not already exist
+- Mount ~partition~ as a SWAP partition
+	> swapon ~partition~
+- Unmount ~partition~
+	> umount ~partition~
+
+_Example mounts for Lenovo Thinkpad G500_
+- EFI System Partition
+	> mount --mkdir /dev/sda1 /mnt/boot
+- Linux Swap Partition
+	> swapon /dev/sda2
+- Linux x86-64 Root Partition
+	> mount /dev/sda3 /mnt
+
+#==============================================================================#
+#                                                                              #
+# 3. Installation                                                              #
+#                                                                              #
+#==============================================================================#
+
+This section highlights the installation process for the new Arch Linux system
+using the Arch Linux Live Environment.
+
+#=== 3.1. Mirrors ===#
+
+On the Arch Linux Live Environment, "reflector" automatically updates mirrorlist
+when connected to the internet. This is *not* true after fresh installation.
+
+- List top 20 mirrors found by reflector
+	> cat /etc/pacman.d/mirrorlist
+
+#=== 3.2. Essential Packages ===#
+
+Install the essential packages to make the new installation run. These packages
+are the base package, the Linux kernel, and the Linux firmware. They should be
+installed to the '/mnt' directory.
+
+You can replace the Linux kernel with another kernel if desired.
+
+- Install base package, Linux kernel, and Linux firmware to the specified
+  directory ('/mnt')
+	> pacstrap -K /mnt base linux linux-firmware
+
+#==============================================================================#
+#                                                                              #
+# 4. Configuration                                                             #
+#                                                                              #
+#==============================================================================#
+
+This section highlights the configuration needed for the new Arch Linux
+installation using the Arch Linux Live Environment.
+
+#=== 4.1. Fstab ===#
+
+Fstab defines how disk partitions and other block devices should be mounted to
+the file system. This tells the new Arch Linux installation how to mount all of
+the file systems on boot.
+
+Generate the fstab file and edit it in case of errors. The generated file is
+located in '/mnt/etc/fstab'.
+
+- Generate fstab file from '/mnt' and append it to '/mnt/etc/fstab'
+	> genfstab [-U/-L] /mnt >> /mnt/etc/fstab
+		- [-U] generates the fstab file defined by UUID
+		- [-L] generates the fstab file defined by Labels
+
+#=== 4.2. Change Root into New System ===#
+
+Change root into the new system effectively puts you into the new system.
+"chroot" can be used, but the Arch Linux Live Environment comes packaged with
+"arch-chroot" which wraps the chroot command while ensuring that important
+functionality is available, like mounting '/dev', '/proc', and other API
+filesystems, or exposing '/etc/resolv.conf' to the chroot.
+
+- Change root into new system
+	> arch-chroot /mnt
+
+#=== 4.3. Set Time Zone ===#
+
+The time zone must be set for the new installation. This can be done by
+setting the local time to a specified time zone using a symbolic link. The
+local time is specified in '/etc/localtime' and a time zone is linked from
+'/usr/share/zoneinfo/~Region/City~'. Alternatively, this can be done using
+"timedatectl".
+
+Some examples of time zones: UTC, America/New_York, America/Chicago
+
+- Manually set local time to specified time zone ~Region/City~ using
+  symbolic link
+	> ln -sf /usr/share/zoneinfo/~Region/City~ /etc/localtime
+
+- List all available time zones
+	> timedatectl list-timezones
+- Set the local time zone to ~Region/City~
+	> timedatectl set-timezone ~Region/City~
+- Check current local time zone
+	> timedatectl status
+
+#=== 4.3.1. Network Time Protocol ===#
+
+To prevent clock drift and ensure accurate time, set up time synchronization
+using a "Network Time Protocol" (NTP) client like "systemd-timesyncd". The
+configuration file for systemd-timesyncd is located in
+'/etc/systemd/timesyncd.conf'.
+
+- Show timesyncd configuration
+	> timedatectl show-timesync --all
+- Set NTP to occur
+	> timedatectl set-ntp true
+- Start timesyncd service
+	> systemctl start systemd-timesyncd.service
+- Enable timesyncd service to run on boot
+	> systemctl enable systemd-timesyncd.service
+- Shows timesyncd service status
+	> timedatectl [timesync-]status
+- Shows verbose timesyncd service information
+	> timedatectl timesync-status
+
+#=== 4.4. Localization ===#
+
+Set the language used in the new system.
+
+It is necessary to edit '/etc/locale.gen' and uncomment "en_US.UTF-8 UTF-8",
+along with any other needed UTF-8 locales, then generate the locales.
+
+Afterwards, create the '/etc/locale.conf' file and insert the the line
+"LANG=en_US.UTF-8". This can also be done by using "localectl".
+
+If you set the console keyboard layout previously, create the
+'/etc/vconsole.conf' file and insert the line "KEYMAP=~layout~"
+
+- Generate locales
+	> locale-gen
+- Show currently set locale
+	> locale
+- List all locales
+	> locale --all-locales
+- Sets locale to specified ~LANG~
+	> localectl set-locale LANG=~LANG~
+
+#=== 4.5. Network Configuration ===#
+
+Network connections must be configured again for the new system. This can be
+done similarly to the Arch Linux Live Environment like before, or can be made
+easier using a network manager.
+
+First, the hostname of the machine must be put in the file '/etc/hostname'.
+Example: ANDREW-ARCHLINUX
+
+Then, perform network configuration in new environment. It will appear as if you
+have internet when chrooted into the new system because it was set up by the
+Arch Linux Live Environment. However, once booted into the system directly, all
+of the configuration from the Live Environment is lost, thus leaving you in a
+state that prevents you from downloading any packages to connect to networks.
+
+So, it is necessary to install packages to do this. "iwd" is a good basic
+package (and is used by the Live Environment through iwctl) to connect to
+networks wirelessly. iwd is also compatible with "NetworkManager", a network
+manager that maintains all of the manual setup of connecting to networks. 
+
+Go through the process using iwd to ensure that you are connected to a network.
+Download the NetworkManager package and start/enable NetworkManager.service it
+to run on boot. NetworkManager automatically connects to any available "system
+connections" that have already been configured. This should allow you to
+automatically connect to a network after booting into the new system.
+
+*Note*: It is very important to keep in mind that network configuration from the
+Arch Linux Live Environment does *not* carry over into the new system.
+
+#=== 4.6. Root Password ===#
+
+Set the root password for the new system.
+
+- Prompt to set root password
+	> passwd
+
+#=== 4.7. Install Bootloader ===#
+
+GRUB seems to be a very reliable and well vetted bootloader. In order to set up
+GRUB correctly, you must be chrooted into the new system. It is possible to be
+set up outside of chroot using "--boot-directory=/mnt/boot" with the
+"grub-install" command, but this adds unnecessary risk to misconfiguration of
+GRUB.
+
+Replace ~mount-point~ with '/boot' if chrooted into new system.
+
+- Install GRUB
+	> pacman -S grub
+- Install EFI Boot Manager
+	> pacman -S efibootmgr
+- Install GRUB EFI application to '~mount-point~/EFI/GRUB'
+	- This also installs its modules to '/boot/grub'
+	> grub-install --target=x86_64-efi --efi-directory=~mount-point~ \
+	  --bootloader-id=GRUB
+- Generate default configuration file
+	> grub-mkconfig -o /boot/grub/grub.cfg
+
+#=== 4.8. Reboot ===#
+
+On reboot, systemd unmounts all partitions. GRUB should remount partitions on
+reboot.
+
+Optionally, you can unmount all partitions to notice any "busy" partitions and
+fix them with "fuser".
+
+- Unmount all partitions in '/mnt'
+	> umount -R /mnt
+- Reboot system
+	> reboot
+
+#==============================================================================#
+#                                                                              #
+# 5. Post-Installation                                                         #
+#                                                                              #
+#==============================================================================#
+
+This section highlights the recommended post-installation steps the new Arch
+Linux system to improve and add common functionalities.
+
+#=== 5.1. System Administration ===#
+
+#=== 5.1.1. Users and Groups ===#
+
+In Arch Linux (and Linux in general), there are "users" and "groups" that define
+account permissions and access privileges.
+
+A user is anyone who uses a computer. Users themselves do not have
+permissions attached to them, but they can still be owners of files.
+
+Users can be grouped together into groups. Groups themselves have permissions
+attached to them. The permissions of a group apply for all users within the
+given group. Users can be part of multiple groups, thus gaining all the
+privileges from all of the groups of which they are a member.
+
+#=== 5.1.1.1. Superuser ===#
+
+A fresh Arch Linux installation leaves you with only a "superuser" account,
+which is better known as "root". Root has full account permissions and access
+privileges. Because of this, root should only really be used for system
+administration. Logging in as root for prolonged periods of time could lead to
+accidental detriments to an Arch Linux installation.
+
+#=== 5.1.1.2. Users ===#
+
+Users have a unique '/home/~user~' directory where all of their individual
+configurations and files are stored. When a new user is added, a new group is
+automatically created with the same name as the user. This is done in order to
+set permissions for the user individually since users themselves do not have
+permissions.
+
+- Add a new user ~user~, add them to group ~group~, and create their
+  '/home/~user~' directory
+	> useradd -m -G ~group~ ~user~
+- Set password for ~user~
+	> passwd ~user~
+	- Should prompt to enter password
+- Rename user ~user~ to ~new-user~
+	> usermod -l ~new-user~ ~user~
+- Delete user ~user~
+	> userdel -r ~user~
+
+#=== 5.1.1.3. Groups ===#
+
+Unlike users, groups have permissions tied to them. So modifying permissions for
+a user must be done by modifying the permissions of the group with the same name
+as the user. This group is created by default and the new user is automatically
+a member of it.
+
+- List all groups on the system
+	> cat /etc/group
+- List groups user ~user~ is a member of
+	> groups ~user~
+- Create new group ~group~
+	> groupadd ~group~
+- Add user ~user~ to group ~group~
+	> usermod -aG ~group~ ~user~
+- Rename group ~group~ to ~new-group~
+	> groupmod -n ~new-group~ ~group~
+	- This keeps all of the same properties and ownerships tied to ~new-group~
+- Delete group ~group~
+	> droupdel ~group~
+
+#=== 5.1.1.4. Privilege Elevation ===#
+
+Unprivileged user accounts can be given temporary root privileges through
+"privilege elevation". Several programs can be used to do this with one of the
+most common being the "sudo" command. The sudo command can be put in front of
+any command that a user may or may not have access to execute, and it will allow
+that command to run with root privileges. Sudo will prompt for the password of
+the user to continue with the command.
+
+In order for a user to use the sudo command, they must have permission to do so.
+The sudo configuration is located in '/etc/sudoers' and must be modified to
+allow certain users or groups to use the sudo command. This configuration should
+*not* be edited simply by using a text editor. Instead, it is highly suggested
+to use the command "visudo" which opens the sudoers configuration in "vi", but
+verifies that no syntax errors break the configuration when saved. Visudo can
+only be used by root or an account with elevated privileges.
+
+To change the default editor for the sudoers configuration, add the following
+line to the sudoers file:
+"Defaults	editor=/usr/bin/~editor~"
+
+To allow a user to gain full root privileges when they precede a command with
+sudo, add the following line to the sudoers file:
+"~user~	ALL=(ALL:ALL) ALL"
+
+To allow a group to gain full root privileges when they precede a command with
+sudo, add the following line to the sudoers file:
+"%~group~	ALL=(ALL:ALL) ALL"
+
+It is common practice to add users that want to have administrator privileges to
+the "wheel" group. This group is used by other programs (like "Polkit") to
+identify administrator accounts.
+
+#=== 5.1.2. Permissions ===#
+
+As mentioned above, groups have a set of permissions that are applied to all
+users within the group. Each file and directory in Linux has a user owner and a
+group owner.
+
+- View permissions for ~file~ in symbolic form
+	> stat -c ~file~
+- View permissions for ~file~ in numeric form
+	> stat -c %a ~file~
+
+To see the permissions for a file using "ls", use the "-l" flag to output a
+long list detailing this information. Here is an example output:
+
+-rwxr-x--x # ~user~ ~group~ ####  ### ## ##:## ~file~
+
+This line in the output of an ls -l command gives all of the necessary
+information to identify the permissions of the file. The first column is where
+specific permission data is displayed. The third and fourth columns represent
+the owning user and owning group respectively. Sometimes it is necessary to
+change the owning user and group of a file. The user needs to have the correct
+privileges to do this.
+
+- Change user ownership if ~file~ to ~user~
+	> chwon ~user~ ~file~
+- Change group ownership if ~file~ to ~group~
+	> chgrp ~group~ ~file~
+
+The first column of this output shows all of the permissions for the file or
+directory.  The first character represents the file type. A normal file is a
+dash, while a directory is d. There can be other types as well.
+
+#=== 5.1.2.1. Symbolic Representation ===#
+
+The next 9 characters are organized in groups of 3 characters, representing the
+read, write, and execute permissions of the file for the ~user~ that owns the
+file, the ~group~ that the file belongs to, and all other users respectively.
+In the example above, the ~user~ has read, write, and execute permissions, the
+~group~ has read and write permissions, and all other users only have the
+execute permission.
+
+These permissions are tied to the file can can be edited using "chmod".
+~Who~ and ~who-else~ can be replaced with "u" to represent the user that owns
+the file, "g" to represent the group that the file belongs to, "o" to represent
+other users, and "a" to represent all of the above. ~Permissions~ can be
+replaced with any subset of "rwx".
+
+- Change permissions for ~who~ to ~permissions~ for ~file~
+	> chmod ~who~=~permissions~ ~file~
+- Add permissions ~permissions~ for ~who~ to ~file~
+	> chmod ~who~+~permissions~ ~file~
+- Remove permissions ~permissions~ for ~who~ to ~file~
+	> chmod ~who~-~permissions~ ~file~
+- Copy permissions for ~who~ to ~who-else~ for ~file~
+	> chmod ~who-else~=~who~
+
+#=== 5.1.2.2. Numeric Representation ===#
+
+Chmod can also be used with a numeric method. This is done by specifying a 3
+digit number, where each digit represents a decimal number that describes the
+permissions when converted to binary. For the example shown above, the numeric
+representation of the permissions would be 751. 7 in binary is 111, 5 in binary
+is 101, and 1 in binary is 001.
+
+When put all together, the numeric representation of the file permissions is:
+111101001
+which aligns with the symbolic representation of the file permissions:
+rwxr-x--x
+
+~Permissions~ can be replaced with a 3 digit number of the numeric
+representation of the new ~file~ permissions.
+
+- Set file ~file~ permissions to ~permissions~
+	> chmod ~permissions~ ~file~
+
+#=== 5.1.2.3. Default Permissions ===#
+
+Default permissions are viewed and set by "umask". Unlike chmod, umask is
+subtractive, meaning you are essentially selecting which permissions to be
+removed by default for files. This means that you need to use the binary
+inverse to set default permissions. In order to set the default permissions to
+the same as the example above, you would need to use 026.
+
+When put all together, this value is:
+000010110
+which is the inverse of desired permissions:
+111101001
+
+~Mask~ can be replaced with any permissions that want to be removed by
+default.
+
+- Display current mask value in numeric representation
+	> umask
+- Display current mask in symbolic representation
+	> umask -S
+- Change umask value to ~mask~
+	> umask ~mask~
+
+#=== 5.1.3. Service Management ===#
+
+Arch Linux uses "systemd" as the "init" process. The init process is the first
+process started during system boot, and systemd is a system and service manager
+for Linux. Interaction with systemd is done through the systemctl command.
+
+- Show system status
+	> systemctl status
+- List running units
+	> systemctl list-units
+- Show status of unit ~unit~
+	> systemctl status ~unit~
+- Start unit ~unit~ immediately
+	> systemctl start ~unit~
+	- Requires root privileges
+- Stop unit ~unit~ immediately
+	> systemctl stop ~unit~
+	- Requires root privileges
+- Enable unit ~unit~ to start automatically at boot
+	> systemctl enable ~unit~
+	- Requires root privileges
+- Disable unit ~unit~ from starting automatically at boot
+	> systemctl disable ~unit~
+	- Requires root privileges
+
+Systemd also has its own logging system.
+
+- Show all messages
+	> journalctl
+
+#=== 5.1.4. System Maintenance ===#
+
+Arch Linux has rolling release, so it is necessary to perform regular system
+maintenance to ensure everything is working correctly.
+
+#=== 5.1.4.1. Check for Errors ===#
+
+- Show all failed systemd services
+	> systemctl --failed
+- Show all messages from this boot
+	> journalctl -b
+
+#=== 5.1.4.2. Backup ===#
+
+Make sure to backup configuration files for desired applications. It may be
+smart to use a "configuration manager" if interested.
+
+It is also important to backup your "dotfiles" as these are the core
+configurations for your system.
+
+It could be helpful to save a list of installed packages so that in the case of
+a full reinstallation, it is easier to recreate the original environment. This
+can be done directly with "pacman".
+
+- Save all currently installed packages to ~filename~
+	> pacman -Qqe > ~filename~
+
+#=== 5.2. Package Management ===#
+
+All Linux distributions come with a package manager. Arch Linux uses the
+pacman package manager.
+
+#=== 5.2.1. Pacman ===#
+
+"Pacman" is the package manager for Arch Linux. It is the main way to download
+packages for your system. Pacman requires root privileges to run.
+
+- Download package ~package~
+	> pacman -S ~package~
+- Remove package ~package~ leaving all of its dependencies installed
+	> pacman -R ~package~
+- Remove package ~package~ and all of its dependencies not required by any other
+  installed package
+	> pacman -Rs ~package~
+- Synchronize the repository databases and updates all packages on the system
+	> pacman -Syyu
+
+Pacman also keeps a cache of previous versions automatically. It is necessary to
+periodically clean this cache so it does not grow too big. When clearing the
+cache, the three most recent versions of packages are kept. This can be done
+weekly automatically by starting and enabling the "paccache.timer" service.
+
+- Clean pacman cache
+	> paccache -r
+
+Additional information on pacman can be found in the pacman documentation.
+
+#=== 5.2.2. Mirrors ===#
+
+Pacman mirrors are specified in '/etc/pacman.d/mirrorlist'. They can be ranked
+and saved in order of speed. This can be done manually, but it is easiest to use
+a dedicated program, like "reflector" to do this automatically.
+
+Reflector provides a "systemd timer" that starts the "reflector.service" weekly.
+To fetch the fastest mirrors, start the reflector.service.
+
+- Fetch fastest mirrors
+	> systemctl start reflector.service
+
+#=== 5.2.3. Arch Build System ===#
+
+The Arch Build System (ABS) is a system for building and packaging software from
+source code. While macman is the specialized Arch Linux tool for binary package
+management, the ABS is a collection of tools for compiling source into
+installable ".pkg.tar.zst" packages.
+
+#=== 5.2.3.1. Arch User Repository ===#
+
+The "Arch User Repository" (AUR) is a community-driven repository for Arch Linux
+users. It contains package descriptions called "PKGBUILD"s that allow you to
+compile a package from source with "makepkg" and then install it via pacman.
+
+To install an AUR package, make sure the "base-devel" package is installed.
+Then, acquire the PKGBUILD, usually through cloning a Git repository. Run
+makepkg in the directory where the files are saved. This will download the code,
+compile it, and package it. Then use pacman to install the package onto your
+system.
+
+- Install AUR package ~package~ after makepkg is ran
+	> pacman -U ~package~.pkg.tar.zst
+
+The manual installation of an AUR package can be done automatically using "yay"
+instead. Yay must be installed from the AUR manually first, but then will help
+install any other AUR packages automatically in the future.
+
+- Generate development package database for "*-git" packages
+	> yay -Y --gendb
+	- This should only be ran once after yay installation
+- Check for development package updates
+	> yay -Syyu --devel
+- Make development package updates permanently enabled
+	> yay -Y --devel --save
+- Install AUR package ~package~ using yay
+	> yay -S ~package~
+
+Refer to the Arch User Repository documentation for additional information.
+
+#=== 5.3. Graphical User Interface ===#
+
+#=== 5.3.1. Display Servers ===#
+
+A "display server" handles the display of "graphical user interfaces" (GUIs).
+
+"Xorg" is the public, open-source implementation of the "X Window system"
+("X11") and has been around for a long time.
+
+"Wayland" is a newer, alternative display server protocol with several
+"compositors" to choose from. These compositors take care of displaying GUIs.
+Hyprland is an example of a Wayland compositor. "Xwayland" is included in
+Wayland and which retains compatibility for X11 apps.
+
+#=== 5.3.2. Desktop Environments ===#
+
+A "desktop environment" is a bundle of packages and applications such as a
+window manager or compositor, panel/taskbar, file manger, terminal emulator,
+text editor, icons, and other utilities.
+
+Any desktop environment or components of desktop environments can be (and is
+recommended to be) installed on Arch Linux since it does not come with anything
+by default. This is seen as a huge benefit so that your Arch Linux installation
+is fully customizable.
+
+#=== 5.3.2.1. Window Managers ===#
+
+A "window manager" is a package that manages the display of windows. It is the
+aspect of a desktop environment that handles GUI windows. They themselves can
+act as a compositor on Wayland. "Hyprland" is a perfect example of a compositing
+window manager designed for Wayland. 
+
+There are dynamic, stacking, and tiling window managers. This essentially
+means that each window manager differs in their handling of window placement.
+
+#=== 5.3.3. Display Managers ===#
+
+A "display manager" essentially acts as the very front end of entering desktop
+environments. They usually act as a login screen for users and allow for the
+selection of which desktop environment to enter.
+
+It is also possible to use the "tty" screen in Arch Linux to login to a user
+account, and then have the '~/.bash_login' for that user load a graphical
+environment. This could be beneficial for when a graphical environment breaks,
+then root can still be logged in to make changes if necessary from the tty
+interface.
+
+#=== 5.4. Multimedia ===#
+
+The "Advanced Linux Sound Architecture" (ALSA) provides kernel driven sound
+card drivers. "udev" automatically detects the hardware at boot time, then ALSA
+takes over for the sound devices. This should work out of the box after being
+unmuted.
+
+- Unmute sound cards
+	> amixer sset Master unmute
+
+"Sound Servers" like "PulseAudio" and "PipeWire" can offer additional feature
+and support more complex audio configuration. PulseAudio is an older application
+and has since been taken over by PipeWire. However, some applications still rely
+on PulseAudio, so a PipeWire API package called "pipewire-pulse" can be
+installed for compatibility. "Wireplumber" is another sound server than can
+offer more advanced audio configuration.
+
+#=== 5.5. Console Improvements ===#
+
+There are many console improvements than you can make to further customize your
+terminal experience.
+
+Primarily, it is useful to make additions to .bash* files to perform certain
+tasks like creating aliases, coloring output, editing the console prompt, etc.
+Each of these files run at different times and it is important to know where to
+ensure correct functionality.
+
+- '~/.bash_profile' runs at every login terminal after a user is logged in
+	- This usually sources '~/.bashrc' since it is not ran in a login terminal
+- '~/.bashrc' runs at every non-login interactive terminal
+- '~/.bash_logout' runs after exiting a login terminal
+
+There are system-wide files for .bash_profile and .bashrc that run for every
+user without these files in their home directory. They are located at
+'/etc/bash.bashrc' and '/etc/profile' respectively.
+
+Refer to the bash documentation for more information.
