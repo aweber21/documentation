@@ -80,12 +80,12 @@ O==============================================================================O
 #                                                                              #
 #==============================================================================#
 
-  *Bold* means it is important
-  ~Italic~ means to replace with respective name/device/etc.
-  'path/to/directory' means path
-  "keywords" means keywords or links
-  - means bullet point
-  > means following is a command for terminal
+    *Bold* means it is important
+    ~Italic~ means to replace with respective name/device/etc.
+    'path/to/directory' means path
+    "keywords" means keywords or links
+    - means bullet point
+    > means following is a command for terminal
 
 #==============================================================================#
 #                                                                              #
