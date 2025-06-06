@@ -148,24 +148,24 @@ medium" in the bootloader.
 US/QWERTY is the default layout for Arch Linux.
 
 - List all available layouts
-	> localectl list-keymaps
+    > localectl list-keymaps
 - Set keyboard layout to ~layout~
-	> loadkeys ~layout~
+    > loadkeys ~layout~
 
 #=== 2.2.2. Console Font ===#
 Fonts are located in '/usr/share/kbd/consolefonts/'.
 - Set console font to ~font~
-	> setfont ~font~
+    > setfont ~font~
 
 #=== 2.3. Verify Boot Mode ===#
 
 Check UEFI bitness to verify boot mode.
 
 > cat '/sys/firmware/efi/fw_platform_size'
-	- 64-bit x64 UEFI returns "64"
-	- 32-bit IA32 UEFI returns "32"
-	- No such file or directory means system may be booted into BIOS (or CSM)
-	  mode
+    - 64-bit x64 UEFI returns "64"
+    - 32-bit IA32 UEFI returns "32"
+    - No such file or directory means system may be booted into BIOS (or CSM)
+      mode
 
 #=== 2.4. Connect to the Internet ===#
 
@@ -176,11 +176,11 @@ connection the first time.
 #=== 2.4.1. Network Interfaces ===#
 
 - Show network interfaces
-	> ip link
+    > ip link
 - List blocked interfaces
-	> rfkill
+    > rfkill
 - Unblock interface
-	> rfkill unblock ~interface~
+    > rfkill unblock ~interface~
 
 #=== 2.4.2. Network Devices ===#
 
@@ -191,11 +191,11 @@ represent ethernet devices.
 the iwctl interactive terminal.
 
 - Show devices
-	> device list
+    > device list
 - Turn on ~device~ if powered off
-	> device ~device~ set-property Powered on
+    > device ~device~ set-property Powered on
 - Show details of ~device~
-	> device ~device~ show
+    > device ~device~ show
 
 #=== 2.4.3. Connect to a Network ===#
 
@@ -207,25 +207,25 @@ device to set it up correctly.
 installation depending on if a network manager is used.
 
 - Enter interactive prompt
-	> iwctl
+    > iwctl
 - Scan for networks with ~device~
-	> station ~device~ scan
-		- Results in no output
+    > station ~device~ scan
+        - Results in no output
 - Show list of networks that were discovered by ~device~ during above command
-	> station ~device~ get-networks
+    > station ~device~ get-networks
 - Connect ~device~ to ~SSID~
-	> station ~device~ connect ~SSID~
-		- Should be prompted to enter password if required
+    > station ~device~ connect ~SSID~
+        - Should be prompted to enter password if required
 - Show connection state of ~device~
-	> station ~device~ show
+    > station ~device~ show
 - Disconnect ~device~ from network
-	> station ~device~ disconnect
+    > station ~device~ disconnect
 - List networks connected to previously
-	> known-networks list
+    > known-networks list
 - Forget network with ~SSID~
-	> known-networks ~SSID~ forget
+    > known-networks ~SSID~ forget
 - Verify internet connection with ping
-	> ping archlinux.org
+    > ping archlinux.org
 
 #=== 2.4.4. Managing Networks ===#
 
@@ -234,9 +234,9 @@ service allows the IWD Service to run on boot. This service manages setting up
 a network connection in the background.
 
 - Start iwd.service
-	> systemctl start iwd.service
+    > systemctl start iwd.service
 - Enable iwd.service to start at boot
-	> systemctl enable iwd.service
+    > systemctl enable iwd.service
 
 #=== 2.5. System Clock ===#
 
@@ -245,7 +245,7 @@ time will be synced automatically once a connection to the internet is
 established.
 
 - Verify clock system is synchronized
-	> timedatectl
+    > timedatectl
 
 #=== 2.6. Disk Partitioning ===#
 
@@ -267,9 +267,9 @@ Disks (block devices) will have the format similar to '/dev/sda', '/dev/sdb'.
 Partitions will have the format similar to '/dev/sda1', '/dev/sda2'.
 
 - List partition tables for block devices
-	> fdisk -l
+    > fdisk -l
 - Opens fdisk interactive prompt to format partition tables for ~disk~
-	> fdisk ~disk~
+    > fdisk ~disk~
 
 *Note*: In the fdisk interactive prompt partitioning, it is possible to put
 labels on partitions to use instead of UUIDs.
@@ -288,11 +288,11 @@ _Example layout for Lenovo Thinkpad G500_
 Format each partition to their respective file system.
 
 - Format ~partition~ to FAT32
-	> mkfs.fat -F 32 ~partition~
+    > mkfs.fat -F 32 ~partition~
 - Format ~partition~ to SWAP
-	> mkswap ~partition~
+    > mkswap ~partition~
 - Format ~partition~ to Ext4
-	> mkfs.ext4 ~partition~
+    > mkfs.ext4 ~partition~
 
 #=== 2.6.3. Mount Partitions ===#
 
@@ -301,20 +301,20 @@ Mount each partition to their respective mount point.
 *Note*: Mount points are preceded by '/mnt' when mounting
 
 - Mount ~partition~ to the ~mount-point~
-	> mount [--mkdir] ~partition~ ~mount-point~
-		- Optional [--mkdir] flag makes directory if it does not already exist
+    > mount [--mkdir] ~partition~ ~mount-point~
+        - Optional [--mkdir] flag makes directory if it does not already exist
 - Mount ~partition~ as a SWAP partition
-	> swapon ~partition~
+    > swapon ~partition~
 - Unmount ~partition~
-	> umount ~partition~
+    > umount ~partition~
 
 _Example mounts for Lenovo Thinkpad G500_
 - EFI System Partition
-	> mount --mkdir /dev/sda1 /mnt/boot
+    > mount --mkdir /dev/sda1 /mnt/boot
 - Linux Swap Partition
-	> swapon /dev/sda2
+    > swapon /dev/sda2
 - Linux x86-64 Root Partition
-	> mount /dev/sda3 /mnt
+    > mount /dev/sda3 /mnt
 
 #==============================================================================#
 #                                                                              #
@@ -331,7 +331,7 @@ On the Arch Linux Live Environment, "reflector" automatically updates mirrorlist
 when connected to the internet. This is *not* true after fresh installation.
 
 - List top 20 mirrors found by reflector
-	> cat /etc/pacman.d/mirrorlist
+    > cat /etc/pacman.d/mirrorlist
 
 #=== 3.2. Essential Packages ===#
 
@@ -343,7 +343,7 @@ You can replace the Linux kernel with another kernel if desired.
 
 - Install base package, Linux kernel, and Linux firmware to the specified
   directory ('/mnt')
-	> pacstrap -K /mnt base linux linux-firmware
+    > pacstrap -K /mnt base linux linux-firmware
 
 #==============================================================================#
 #                                                                              #
@@ -364,9 +364,9 @@ Generate the fstab file and edit it in case of errors. The generated file is
 located in '/mnt/etc/fstab'.
 
 - Generate fstab file from '/mnt' and append it to '/mnt/etc/fstab'
-	> genfstab [-U/-L] /mnt >> /mnt/etc/fstab
-		- [-U] generates the fstab file defined by UUID
-		- [-L] generates the fstab file defined by Labels
+    > genfstab [-U/-L] /mnt >> /mnt/etc/fstab
+        - [-U] generates the fstab file defined by UUID
+        - [-L] generates the fstab file defined by Labels
 
 #=== 4.2. Change Root into New System ===#
 
@@ -377,7 +377,7 @@ functionality is available, like mounting '/dev', '/proc', and other API
 filesystems, or exposing '/etc/resolv.conf' to the chroot.
 
 - Change root into new system
-	> arch-chroot /mnt
+    > arch-chroot /mnt
 
 #=== 4.3. Set Time Zone ===#
 
@@ -391,14 +391,14 @@ Some examples of time zones: UTC, America/New_York, America/Chicago
 
 - Manually set local time to specified time zone ~Region/City~ using
   symbolic link
-	> ln -sf /usr/share/zoneinfo/~Region/City~ /etc/localtime
+    > ln -sf /usr/share/zoneinfo/~Region/City~ /etc/localtime
 
 - List all available time zones
-	> timedatectl list-timezones
+    > timedatectl list-timezones
 - Set the local time zone to ~Region/City~
-	> timedatectl set-timezone ~Region/City~
+    > timedatectl set-timezone ~Region/City~
 - Check current local time zone
-	> timedatectl status
+    > timedatectl status
 
 #=== 4.3.1. Network Time Protocol ===#
 
@@ -408,17 +408,17 @@ configuration file for systemd-timesyncd is located in
 '/etc/systemd/timesyncd.conf'.
 
 - Show timesyncd configuration
-	> timedatectl show-timesync --all
+    > timedatectl show-timesync --all
 - Set NTP to occur
-	> timedatectl set-ntp true
+    > timedatectl set-ntp true
 - Start timesyncd service
-	> systemctl start systemd-timesyncd.service
+    > systemctl start systemd-timesyncd.service
 - Enable timesyncd service to run on boot
-	> systemctl enable systemd-timesyncd.service
+    > systemctl enable systemd-timesyncd.service
 - Shows timesyncd service status
-	> timedatectl [timesync-]status
+    > timedatectl [timesync-]status
 - Shows verbose timesyncd service information
-	> timedatectl timesync-status
+    > timedatectl timesync-status
 
 #=== 4.4. Localization ===#
 
@@ -434,13 +434,13 @@ If you set the console keyboard layout previously, create the
 '/etc/vconsole.conf' file and insert the line "KEYMAP=~layout~"
 
 - Generate locales
-	> locale-gen
+    > locale-gen
 - Show currently set locale
-	> locale
+    > locale
 - List all locales
-	> locale --all-locales
+    > locale --all-locales
 - Sets locale to specified ~LANG~
-	> localectl set-locale LANG=~LANG~
+    > localectl set-locale LANG=~LANG~
 
 #=== 4.5. Network Configuration ===#
 
@@ -476,7 +476,7 @@ Arch Linux Live Environment does *not* carry over into the new system.
 Set the root password for the new system.
 
 - Prompt to set root password
-	> passwd
+    > passwd
 
 #=== 4.7. Install Bootloader ===#
 
@@ -489,15 +489,15 @@ GRUB.
 Replace ~mount-point~ with '/boot' if chrooted into new system.
 
 - Install GRUB
-	> pacman -S grub
+    > pacman -S grub
 - Install EFI Boot Manager
-	> pacman -S efibootmgr
+    > pacman -S efibootmgr
 - Install GRUB EFI application to '~mount-point~/EFI/GRUB'
-	- This also installs its modules to '/boot/grub'
-	> grub-install --target=x86_64-efi --efi-directory=~mount-point~ \
-	  --bootloader-id=GRUB
+    - This also installs its modules to '/boot/grub'
+    > grub-install --target=x86_64-efi --efi-directory=~mount-point~ \
+      --bootloader-id=GRUB
 - Generate default configuration file
-	> grub-mkconfig -o /boot/grub/grub.cfg
+    > grub-mkconfig -o /boot/grub/grub.cfg
 
 #=== 4.8. Reboot ===#
 
@@ -508,9 +508,9 @@ Optionally, you can unmount all partitions to notice any "busy" partitions and
 fix them with "fuser".
 
 - Unmount all partitions in '/mnt'
-	> umount -R /mnt
+    > umount -R /mnt
 - Reboot system
-	> reboot
+    > reboot
 
 #==============================================================================#
 #                                                                              #
@@ -554,14 +554,14 @@ permissions.
 
 - Add a new user ~user~, add them to group ~group~, and create their
   '/home/~user~' directory
-	> useradd -m -G ~group~ ~user~
+    > useradd -m -G ~group~ ~user~
 - Set password for ~user~
-	> passwd ~user~
-	- Should prompt to enter password
+    > passwd ~user~
+    - Should prompt to enter password
 - Rename user ~user~ to ~new-user~
-	> usermod -l ~new-user~ ~user~
+    > usermod -l ~new-user~ ~user~
 - Delete user ~user~
-	> userdel -r ~user~
+    > userdel -r ~user~
 
 #=== 5.1.1.3. Groups ===#
 
@@ -571,18 +571,18 @@ as the user. This group is created by default and the new user is automatically
 a member of it.
 
 - List all groups on the system
-	> cat /etc/group
+    > cat /etc/group
 - List groups user ~user~ is a member of
-	> groups ~user~
+    > groups ~user~
 - Create new group ~group~
-	> groupadd ~group~
+    > groupadd ~group~
 - Add user ~user~ to group ~group~
-	> usermod -aG ~group~ ~user~
+    > usermod -aG ~group~ ~user~
 - Rename group ~group~ to ~new-group~
-	> groupmod -n ~new-group~ ~group~
-	- This keeps all of the same properties and ownerships tied to ~new-group~
+    > groupmod -n ~new-group~ ~group~
+    - This keeps all of the same properties and ownerships tied to ~new-group~
 - Delete group ~group~
-	> droupdel ~group~
+    > droupdel ~group~
 
 #=== 5.1.1.4. Privilege Elevation ===#
 
@@ -603,15 +603,15 @@ only be used by root or an account with elevated privileges.
 
 To change the default editor for the sudoers configuration, add the following
 line to the sudoers file:
-"Defaults	editor=/usr/bin/~editor~"
+"Defaults   editor=/usr/bin/~editor~"
 
 To allow a user to gain full root privileges when they precede a command with
 sudo, add the following line to the sudoers file:
-"~user~	ALL=(ALL:ALL) ALL"
+"~user~ ALL=(ALL:ALL) ALL"
 
 To allow a group to gain full root privileges when they precede a command with
 sudo, add the following line to the sudoers file:
-"%~group~	ALL=(ALL:ALL) ALL"
+"%~group~   ALL=(ALL:ALL) ALL"
 
 It is common practice to add users that want to have administrator privileges to
 the "wheel" group. This group is used by other programs (like "Polkit") to
@@ -624,9 +624,9 @@ users within the group. Each file and directory in Linux has a user owner and a
 group owner.
 
 - View permissions for ~file~ in symbolic form
-	> stat -c ~file~
+    > stat -c ~file~
 - View permissions for ~file~ in numeric form
-	> stat -c %a ~file~
+    > stat -c %a ~file~
 
 To see the permissions for a file using "ls", use the "-l" flag to output a
 long list detailing this information. Here is an example output:
@@ -641,9 +641,9 @@ change the owning user and group of a file. The user needs to have the correct
 privileges to do this.
 
 - Change user ownership if ~file~ to ~user~
-	> chwon ~user~ ~file~
+    > chwon ~user~ ~file~
 - Change group ownership if ~file~ to ~group~
-	> chgrp ~group~ ~file~
+    > chgrp ~group~ ~file~
 
 The first column of this output shows all of the permissions for the file or
 directory.  The first character represents the file type. A normal file is a
@@ -665,13 +665,13 @@ other users, and "a" to represent all of the above. ~Permissions~ can be
 replaced with any subset of "rwx".
 
 - Change permissions for ~who~ to ~permissions~ for ~file~
-	> chmod ~who~=~permissions~ ~file~
+    > chmod ~who~=~permissions~ ~file~
 - Add permissions ~permissions~ for ~who~ to ~file~
-	> chmod ~who~+~permissions~ ~file~
+    > chmod ~who~+~permissions~ ~file~
 - Remove permissions ~permissions~ for ~who~ to ~file~
-	> chmod ~who~-~permissions~ ~file~
+    > chmod ~who~-~permissions~ ~file~
 - Copy permissions for ~who~ to ~who-else~ for ~file~
-	> chmod ~who-else~=~who~
+    > chmod ~who-else~=~who~
 
 #=== 5.1.2.2. Numeric Representation ===#
 
@@ -690,7 +690,7 @@ rwxr-x--x
 representation of the new ~file~ permissions.
 
 - Set file ~file~ permissions to ~permissions~
-	> chmod ~permissions~ ~file~
+    > chmod ~permissions~ ~file~
 
 #=== 5.1.2.3. Default Permissions ===#
 
@@ -709,11 +709,11 @@ which is the inverse of desired permissions:
 default.
 
 - Display current mask value in numeric representation
-	> umask
+    > umask
 - Display current mask in symbolic representation
-	> umask -S
+    > umask -S
 - Change umask value to ~mask~
-	> umask ~mask~
+    > umask ~mask~
 
 #=== 5.1.3. Service Management ===#
 
@@ -722,28 +722,28 @@ process started during system boot, and systemd is a system and service manager
 for Linux. Interaction with systemd is done through the systemctl command.
 
 - Show system status
-	> systemctl status
+    > systemctl status
 - List running units
-	> systemctl list-units
+    > systemctl list-units
 - Show status of unit ~unit~
-	> systemctl status ~unit~
+    > systemctl status ~unit~
 - Start unit ~unit~ immediately
-	> systemctl start ~unit~
-	- Requires root privileges
+    > systemctl start ~unit~
+    - Requires root privileges
 - Stop unit ~unit~ immediately
-	> systemctl stop ~unit~
-	- Requires root privileges
+    > systemctl stop ~unit~
+    - Requires root privileges
 - Enable unit ~unit~ to start automatically at boot
-	> systemctl enable ~unit~
-	- Requires root privileges
+    > systemctl enable ~unit~
+    - Requires root privileges
 - Disable unit ~unit~ from starting automatically at boot
-	> systemctl disable ~unit~
-	- Requires root privileges
+    > systemctl disable ~unit~
+    - Requires root privileges
 
 Systemd also has its own logging system.
 
 - Show all messages
-	> journalctl
+    > journalctl
 
 #=== 5.1.4. System Maintenance ===#
 
@@ -753,9 +753,9 @@ maintenance to ensure everything is working correctly.
 #=== 5.1.4.1. Check for Errors ===#
 
 - Show all failed systemd services
-	> systemctl --failed
+    > systemctl --failed
 - Show all messages from this boot
-	> journalctl -b
+    > journalctl -b
 
 #=== 5.1.4.2. Backup ===#
 
@@ -770,7 +770,7 @@ a full reinstallation, it is easier to recreate the original environment. This
 can be done directly with "pacman".
 
 - Save all currently installed packages to ~filename~
-	> pacman -Qqe > ~filename~
+    > pacman -Qqe > ~filename~
 
 #=== 5.2. Package Management ===#
 
@@ -783,14 +783,14 @@ pacman package manager.
 packages for your system. Pacman requires root privileges to run.
 
 - Download package ~package~
-	> pacman -S ~package~
+    > pacman -S ~package~
 - Remove package ~package~ leaving all of its dependencies installed
-	> pacman -R ~package~
+    > pacman -R ~package~
 - Remove package ~package~ and all of its dependencies not required by any other
   installed package
-	> pacman -Rs ~package~
+    > pacman -Rs ~package~
 - Synchronize the repository databases and updates all packages on the system
-	> pacman -Syyu
+    > pacman -Syyu
 
 Pacman also keeps a cache of previous versions automatically. It is necessary to
 periodically clean this cache so it does not grow too big. When clearing the
@@ -798,7 +798,7 @@ cache, the three most recent versions of packages are kept. This can be done
 weekly automatically by starting and enabling the "paccache.timer" service.
 
 - Clean pacman cache
-	> paccache -r
+    > paccache -r
 
 Additional information on pacman can be found in the pacman documentation.
 
@@ -812,7 +812,7 @@ Reflector provides a "systemd timer" that starts the "reflector.service" weekly.
 To fetch the fastest mirrors, start the reflector.service.
 
 - Fetch fastest mirrors
-	> systemctl start reflector.service
+    > systemctl start reflector.service
 
 #=== 5.2.3. Arch Build System ===#
 
@@ -834,21 +834,21 @@ compile it, and package it. Then use pacman to install the package onto your
 system.
 
 - Install AUR package ~package~ after makepkg is ran
-	> pacman -U ~package~.pkg.tar.zst
+    > pacman -U ~package~.pkg.tar.zst
 
 The manual installation of an AUR package can be done automatically using "yay"
 instead. Yay must be installed from the AUR manually first, but then will help
 install any other AUR packages automatically in the future.
 
 - Generate development package database for "*-git" packages
-	> yay -Y --gendb
-	- This should only be ran once after yay installation
+    > yay -Y --gendb
+    - This should only be ran once after yay installation
 - Check for development package updates
-	> yay -Syyu --devel
+    > yay -Syyu --devel
 - Make development package updates permanently enabled
-	> yay -Y --devel --save
+    > yay -Y --devel --save
 - Install AUR package ~package~ using yay
-	> yay -S ~package~
+    > yay -S ~package~
 
 Refer to the Arch User Repository documentation for additional information.
 
@@ -907,7 +907,7 @@ takes over for the sound devices. This should work out of the box after being
 unmuted.
 
 - Unmute sound cards
-	> amixer sset Master unmute
+    > amixer sset Master unmute
 
 "Sound Servers" like "PulseAudio" and "PipeWire" can offer additional feature
 and support more complex audio configuration. PulseAudio is an older application
@@ -927,7 +927,7 @@ Each of these files run at different times and it is important to know where to
 ensure correct functionality.
 
 - '~/.bash_profile' runs at every login terminal after a user is logged in
-	- This usually sources '~/.bashrc' since it is not ran in a login terminal
+    - This usually sources '~/.bashrc' since it is not ran in a login terminal
 - '~/.bashrc' runs at every non-login interactive terminal
 - '~/.bash_logout' runs after exiting a login terminal
 
