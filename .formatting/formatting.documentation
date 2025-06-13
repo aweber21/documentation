@@ -14,6 +14,8 @@
 #   "CTRL + L"                                                                 #
 # In order to append section ~section~ to ~file~, use                          #
 #   "cat .formatting/sections/~section~.documentation >> ~file~"               #
+# or within Vim, use                                                           #
+#   ":read .formatting/sections/~sections~.documentation"                      #
 # ---------------------------------------------------------------------------- #
 ################################################################################
 
