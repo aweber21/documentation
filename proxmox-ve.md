@@ -205,12 +205,16 @@ When you log in to Proxmox VE via a web browser, a warning pops up saying that
 there is 'No valid subscription'. The easiest way to fix this is to manually
 edit a file located at
 `/usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js` using Vim or Nano.
-Search for 'No valid subscription' and navigate up one line to 'Ext.Msg.show({'
-and change it to 'void({ //Ext.Msg.show({'. Afterwards, restart the
-pveproxy.service using `systemctl restart pveproxy.service`.
 
 **NOTE**: Vim will need to be installed using `apt install vim` on the Proxmox
 VE system before it can be used.
+
+There are a few different ways to fix this, but essentially you want to avoid
+executing 'Ext.Msg.show({' and instead run 'void({ //Ext.Msg.show({' (could
+break things) or just 'orig_cmd()'. There are scripts online that do this for
+you. Keep in mind, this will be reset after any update to the
+proxmox-widget-toolkit. Afterwards, restart the pveproxy.service using
+`systemctl restart pveproxy.service`.
 
 ### 4.4. Enable IOMMU
 
