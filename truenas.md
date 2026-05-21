@@ -256,6 +256,10 @@ creation of a new drive pool. This scrub task tries to run a scrub every Sunday
 at midnight and will succeed if the last scrub was performed over 35 days ago.
 The scrub task can be configured to whatever increment is desired.
 
+**NOTE**: The following 'S.M.A.R.T.' tests can only be ran on physical hardware.
+So, if you passed through individual disks, thus using virtual disks, these
+tests will not run.
+
 On top of the scrub task, you're going to want to also create 'S.M.A.R.T. Test'
 task. This is no longer configured under the 'Data Protection' menu but instead
 configured using Cron jobs. Navigate to 'Advanced Settings' under 'System' to
