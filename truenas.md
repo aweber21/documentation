@@ -73,7 +73,7 @@ sure 'Advanced' is checked for every menu:
 <ins>General</ins>
 Node: pve01
 VM ID: 100
-Name: TrueNAS
+Name: truenas
 Start at boot: yes
 
 <ins>OS</ins>
