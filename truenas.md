@@ -367,13 +367,13 @@ configuration.
 ### 4.9. QEMU Guest Agent
 
 In order for the QEMU Guest Agent to work on Proxmox VE, you must install
-"qemu-guest-agent" on the virtual machine. This can be done by navigating to the
-VM's shell and running `apt install qemu-guest-agent` to install it and running
-`systemctl enable --now qemu-guest-agent` to start the service.
+"qemu-guest-agent" on the virtual machine.
 
 TrueNAS comes with "qemu-guest-agent" preinstalled on the machine and should
 automatically enable and start the service if Proxmox VE has enabled the QEMU
-Guest Agent for the VM.
+Guest Agent for the VM. If this is enabled after the VM is already started, it
+is required to shutdown the machine completely and then turn it back on. A
+reboot will not make enabling the QEMU Guest Agent take effect.
 
 ### 4.10. Reserve IP Address On Router
 
