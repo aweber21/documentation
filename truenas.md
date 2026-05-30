@@ -28,7 +28,8 @@ This file contains all of the relevant information regarding TrueNAS.
 4.7.1\. [Localization](#471-localization)  
 4.7.2\. [Alerts](#472-alerts)  
 4.8\. [Save Configuration](#48-save-configuration)  
-4.9\. [Reserve IP Address On Router](#49-reserve-ip-address-on-router)  
+4.9\. [QEMU Guest Agent](#49-qemu-guest-agent)  
+4.10\. [Reserve IP Address On Router](#410-reserve-ip-address-on-router)  
 5\. [Web Interface](#5-web-interface)  
 5.1\. [Pools, Datasets, and Shares](#51-pools-datasets-and-shares)  
 
@@ -82,7 +83,7 @@ Use CD/DVD disk image file (iso)
     ISO image: TrueNAS ISO
 
 <ins>System</ins>
-Defaults
+Qemu Agent: yes
 
 <ins>Disks</ins>
 Defaults
@@ -363,7 +364,18 @@ Password Secret Seed' to restore configuration from a new drive. If this is not
 checked then the same installation of TrueNAS is required to decode the
 configuration.
 
-### 4.9. Reserve IP Address On Router
+### 4.9. QEMU Guest Agent
+
+In order for the QEMU Guest Agent to work on Proxmox VE, you must install
+"qemu-guest-agent" on the virtual machine. This can be done by navigating to the
+VM's shell and running `apt install qemu-guest-agent` to install it and running
+`systemctl enable --now qemu-guest-agent` to start the service.
+
+TrueNAS comes with "qemu-guest-agent" preinstalled on the machine and should
+automatically enable and start the service if Proxmox VE has enabled the QEMU
+Guest Agent for the VM.
+
+### 4.10. Reserve IP Address On Router
 
 Open your router settings and locate the new TrueNAS virtual machine and reserve
 the desired IP address.
