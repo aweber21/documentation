@@ -65,9 +65,9 @@ downloaded. Click 'Download from URL' and paste the download URL. Query the URL
 and as long as everything looks good, click 'Download' to download the image to
 the Proxmox VE installation.
 
-#### 2.2. Create Virtual Machine
+### 2.2. Create Virtual Machine
 
-Once the installation is complete, click 'Create VM' in the top right corner to
+Once the TrueNAS ISO is downloaded, click 'Create VM' in the top right corner to
 create a virtual machine. Use the following settings for the VM while making
 sure 'Advanced' is checked for every menu:
 
