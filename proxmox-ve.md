@@ -23,7 +23,8 @@ This file contains all of the relevant information regarding Proxmox VE.
 4.3\. [Remove Warning](#43-remove-warning)  
 4.4\. [Enable IOMMU](#44-enable-iommu)  
 4.5\. [Update GRUB For UEFI](#45-update-grub-for-uefi)  
-4.6\. [Reserve IP Address On Router](#46-reserve-ip-address-on-router)  
+4.6\. [Adjust Power Settings For Laptops](#46-adjust-power-settings-for-laptops)
+4.7\. [Reserve IP Address On Router](#46-reserve-ip-address-on-router)  
 5\. [Web Interface](#5-web-interface)  
 5.1\. [Cluster, Nodes, Networks, and Storage](#51-cluster-nodes-networks-and-storage)  
 
@@ -237,7 +238,32 @@ this returns '64', it is necessary to install 'grub-efi-amd64' using
 and also run `update-initramfs -u -k all` for good measure. Restart to take
 effect.
 
-### 4.6. Reserve IP Address On Router
+### 4.6. Additional Laptop Settings
+
+If running Proxmox VE from a laptop, you'll likely need to change settings to
+maintain functionality when the laptop lid is closed. Navigate to
+`/etc/systemd/logind.conf` and uncomment and edit the following lines:
+
+- HandleLidSwitch=ignore
+- HandleListSwitchExternalPower=ignore
+- HandleLidSwitchDocked=ignore
+
+To apply the new settings, restart the systemd service by executing
+`systemctl restart systemd-logind`. It is recommended to restart the laptop
+afterwards as well to make sure the changes take effect.
+
+This will only prevent the laptop from going to sleep when the lid is closed.
+This means that the screen will still stay on when the lid is closed. To fix
+this, we need to also edit the file `/etc/default/grub` at the
+'GRUB_CMDLINE_LINUX_DEFAULT' line. In the quotes, add a space followed by
+'consoleblank=30'. After this is added, save the file and run `update-grub`
+to confirm changes and reboot system for them to take effect.
+
+This kernel parameter makes the screen shut off after 30 seconds of inactivity.
+Pressing a key on the keyboard will wake it back up if access to the terminal on
+the laptop itself is needed.
+
+### 4.7. Reserve IP Address On Router
 
 Open your router settings and locate the new Proxmox VE installation and
 reserve the same IP address that was specified during the installation process.
