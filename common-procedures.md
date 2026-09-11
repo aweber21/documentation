@@ -13,6 +13,7 @@ This file contains all of the relevant information regarding common procedures.
 2.1.4\. [Linux Container Template](#214-linux-container-template)  
 3\. [Installation](#3-installation)  
 3.1\. [Create Virtual Machine](#31-create-virtual-machine)  
+3.1.1\. [Import Disk Image](#311-import-disk-image)  
 3.2\. [Create Linux Container](#32-create-linux-container)  
 3.3\. [Proxmox Helper Scripts](#33-proxmox-helper-scripts)  
 4\. [Post-Installation](#4-post-installation)  
@@ -141,6 +142,8 @@ Qemu Agent: yes
 <ins>Disks</ins>
 Defaults
 
+**NOTE**: Reference next section for importing disk images.
+
 <ins>CPU</ins>
 Cores: 2
 Type: x86-64-v2-AES (default)
@@ -157,6 +160,31 @@ Defaults
 
 <ins>Confirm</ins>
 Start after created: _Optional_
+
+#### 3.1.1. Import Disk Image
+
+If a disk image was downloaded and needs to be imported to the virtual machine,
+there are a few ways this can happen.
+
+If the image was downloaded using the Proxmox GUI or stored in
+'/var/lib/vz/import', then it can be imported during VM creation. On the 'Disks'
+page, remove all drives and press 'Import' in the bottom left. Proceed to select
+the correct image and assign it to a drive.
+
+**NOTE**: There is also a manual process if the image is stored somewhere else,
+or if you just desire to do it manually. That will be described below.
+
+After the image is successfully downloaded and expanded, import the image from
+the host to the virtual machine using
+`qm importdisk vm-id /path/to/disk-image efi-location`.
+
+Once the image is imported to the virtual machine, navigate to the Home
+Assistant VM's 'Hardware' tab. Select the 'Unused Disk' and click the 'Edit'
+button. In the 'Add: Unused Disk' menu, enable 'Discard' if you're using an SSD.
+Click 'Add' to add the disk.
+
+Navigate to the VM's 'Options' tab. Select 'Boot Order' and click the 'Edit'
+button. Check the newly created drive (scsi0) and unselect the rest.
 
 ### 3.2. Create Linux Container
 
