@@ -7,24 +7,21 @@ This file contains all of the relevant information regarding Frigate.
 1\. [Frigate](#1-frigate)  
 1.1\. [Features](#11-features)  
 2\. [Pre-Installation](#2-pre-installation)  
-2.1\. [Installation Image and Media](#21-installation-image-and-media)  
-2.2\. [Create Linux Container](#22-create-linux-container)  
-2.2.1\. [Media Mount Point](#221-media-mount-point)  
-2.2.2\. [Hardware Acceleration Passthrough](#222-hardware-acceleration-passthrough)  
+2.1\. [Acquire and Prepare Image](#21-acquire-and-prepare-installation)  
 3\. [Installation](#3-installation)  
-3.1\. [Update System](#31-update-system)  
-3.2\. [Create Frigate Administrator](#32-create-frigate-administrator)  
-3.2.1\. [Create New User](#321-create-new-user)  
-3.2.2\. [Install and Configure Sudo](#322-install-and-configure-sudo)  
-3.3\. [Install Docker](#33-install-docker)  
-3.4\. [Install Frigate](#34-install-frigate)  
+3.1\. [Create Linux Container](#31-create-linux-container)  
+3.1.1\. [Media Mount Point](#311-media-mount-point)  
+3.1.2\. [Hardware Acceleration Passthrough](#312-hardware-acceleration-passthrough)  
+3.2\. [Proxmox Helper Script](#32-proxmox-helper-script)  
 4\. [Post-Installation](#4-post-installation)  
-4.1\. [Access Server Via Browser](#41-access-server-via-browser)  
-4.2\. [Create Ethernet Bridge For Local Camera Network](#42-create-ethernet-bridge-for-local-camera-network)  
-4.3\. [Configure NTP On Proxmox Host](#43-configure-ntp-on-proxmox-host)  
-4.4\. [Update Shared Memory](#44-update-shared-memory)  
-4.5\. [Users](#45-users)  
-4.?\. [Reserve IP Address On Router](#45-reserve-ip-address-on-router)  
+4.1\. [Debian Container Configuration](#debian-container-configuration)  
+4.2\. [Install Frigate](#34-install-frigate)  
+4.3\. [Access Server Via Browser](#43-access-server-via-browser)  
+4.4\. [Create Ethernet Bridge For Local Camera Network](#44-create-ethernet-bridge-for-local-camera-network)  
+4.5\. [Configure NTP On Proxmox Host](#45-configure-ntp-on-proxmox-host)  
+4.6\. [Update Shared Memory](#46-update-shared-memory)  
+4.7\. [Users](#47-users)  
+4.8\. [Reserve IP Address On Router](#48-reserve-ip-address-on-router)  
 5\. [Web Interface and Configuration](#5-web-interface-and-configuration)  
 
 ## 1. Frigate
@@ -56,32 +53,30 @@ have also found success in running Frigate in a Docker container in a Proxmox
 Virtual Machine or Linux Container (LXC). This document will cover installation
 for an LXC on Proxmox.
 
-There exists a Proxmox VE Helper Script, but it is not recommended because it is
-highly resistant to updates and prevents upgrading to a newer version in the
-future.
-
-### 2.1. Installation Image and Media
-
-#### 2.1.1. Acquire and Prepare Installation
+### 2.1. Acquire and Prepare Image
 
 The recommended operating system to run Frigate on is
 'Debian 12 Bookworm (standard)'. Proxmox comes with a LXC Container Template
 called 'debian-12-standard' and this is sufficient for the Frigate LXC.
 
-If another image is desired, manually download it and upload it to Proxmox, or
-download from URL through the Proxmox GUI.
+Refer to [Linux Container Template](common-procedures.md#214-linux-container-template)
+instructions to download a Debian LXC template.
 
-### 2.2. Create Linux Container
+## 3. Installation
 
-Once the OS is acquired, click 'Create CT' in the top right corner to create
-a Linux Container.  
+This section highlights the installation process for a new Frigate system using
+a Proxmox VE Linux Container.
 
-**NOTE**: You may need to install the LXC Template ahead of time by navigating
-to 'local' storage under the Proxmox VE Node and select 'Templates' under the
-'CT Templates' section.
+Begin by clicking 'Start' in the top right corner of the Frigate LXC page.
+Navigate to the console and login using 'root' and the password provided when
+creating the LXC.
 
-Use the following settings for the LXC while making sure 'Advanced' is checked
-for every menu:
+### 3.1. Create Linux Container
+
+Refer to [Create Linux Container](common-procedures.md#create-linux-container)
+instructions to create a Debian Linux Container.
+
+Use the following specific settings for the LXC:
 
 <ins>General</ins>
 Node: pve02
@@ -127,7 +122,7 @@ Defaults
 <ins>Confirm</ins>
 Start after created: no
 
-#### 2.2.1. Media Mount Point
+#### 3.1.1. Media Mount Point
 
 At this point, it is good to start thinking about where Frigate will be
 installed in the LXC filesystem. Typically, it's good to keep it generic by
@@ -162,7 +157,7 @@ created by the filesystem and not needed by the LXC. By default, only the 'root'
 user on the Proxmox host will have access to this directory anyway, not even the
 'root' on the LXC is given access to this folder. It is safe to ignore it.
 
-#### 2.2.2. Hardware Acceleration Passthrough
+#### 3.1.2. Hardware Acceleration Passthrough
 
 It is highly recommended to use hardware acceleration for processing images and
 videos in Frigate. This can be done using integrated graphics, a dedicated
@@ -183,71 +178,29 @@ host system and can be confirmed by entering a shell and running the command
 <ins>Add: Device</ins>
 Device Path: /dev/dri/renderD128
 
-## 3. Installation
+### 3.2. Proxmox Helper Script
 
-This section highlights the installation process for a new Frigate system using
-a Proxmox VE Linux Container.
+There exists a Proxmox VE Helper Script, but it is not recommended because it is
+highly resistant to updates and prevents upgrading to a newer version in the
+future.
 
-Begin by clicking 'Start' in the top right corner of the Frigate LXC page.
-Navigate to the console and login using 'root' and the password provided when
-creating the LXC.
+Refer to [Proxmox Helper Scripts](common-procedures.md#33-proxmox-helper-scripts)
+if desired instead.
 
-### 3.1. Update System
+## 4. Post-Installation
 
-Once booted into the Frigate LXC, run a standard `apt update && apt upgrade -y`
-to update the container. This may take a few minutes to complete. After the
-system upgrade is complete, reboot if prompted to.
+This section highlights the recommended post-installation steps for the new
+Frigate system.
 
-### 3.2. Create Frigate Administrator
+### 4.1. Debian Container Configuration
 
-It is strongly recommended to run Frigate from a non-root account. This is good
-practice to prevent irreversible commanding by accident, and to only use
-elevated privileges when explicitly asking to.
+Refer to [Debian Container Configuration](common-procedures.md#41-debian-container-configuration)
+to configure the Debian Linux Container.
 
-**NOTE**: If you decide to make a Frigate administrator account, make sure to
-log out of root and log in as the new account before proceeding to download
-Docker. This is done by executing `logout` or pressing 'Ctrl-D' and logging in
-as the new user.
+Make sure to create a Frigate Administrator account with the username of
+"frigate_admin".
 
-#### 3.2.1. Create New User
-
-Run the command `useradd -m frigate_admin` to create a new user with the name
-"frigate_admin" and to create a home folder for this user.
-
-Then, execute `passwd frigate_admin` to set a password for this user.
-
-If you'd like, you can also set the default shell for this user by editing the
-line in '/etc/passwd' that starts with the username. At the end of the line,
-it'll point to the current shell to be used on login, likely '/bin/sh' by
-default. Change this to '/bin/bash' to use bash, or just type `bash` after
-logging in to enter the 'bash' shell.
-
-#### 3.2.2. Install and Configure Sudo
-
-Install `sudo` by executing `apt install sudo`. Wait for the installation to
-complete.
-
-Then, add the new user to the "sudo" group in order to execute commands with
-elevated privileges. To do this, execute `usermod -aG sudo frigate_admin`.
-
-If desired, you can enable "frigate_admin" to use passwordless `sudo`. This is
-done by the following command:
-
-`echo 'frigate_admin    ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/user`
-
-### 3.3. Install Docker
-
-**NOTE**: Log out of root and log in as the new user if one was created.
-
-In order to install the Docker Engine, it is best to follow the official
-documentation provided on the Docker website. This website is
-'https://docs.docker.com/engine/install/debian/'. Specifically, follow the
-section that is named "Install using the apt repository".
-
-After installing Docker, follow the Linux post-installation steps for Docker
-Engine at 'https://docs.docker.com/engine/install/linux-postinstall/'.
-
-### 3.4. Install Frigate
+### 4.2. Install Frigate
 
 When you first run Frigate, it creates the necessary directory structure for
 you. However, if you want to do this manually, you will need to create a config
@@ -289,26 +242,19 @@ the Frigate Docker logs. If ran in the foreground, you can find it on the screen
 at some point in the installation process. If ran in the background/as a daemon,
 you can run `docker logs frigate` to find it also.
 
-## 4. Post-Installation
+### 4.3. Access Server Via Browser
 
-This section highlights the recommended post-installation steps for the new
-Frigate system.
+Refer to [Access Server Via Browser](common-procedures.md#42-access-server-via-browser)
+to access the server.
 
-### 4.1. Access Server Via Browser
-
-Navigate to the URL provided on the first boot to the Proxmox VE installation.
-This URL is in the form of 'https://ip-address:8971/' and is used to access the
-server from another device. The first time this URL is accessed, your browser
-will most likely warn you that the connection is not private. This is expected.
-Click 'Show Details' or something similar and click the link that will allow you
-to 'Visit This Website'.
+The URL will be: https, the node's IP address, and a default port of 8971.
 
 After navigating to the URL, login as 'admin' with the admin password recorded
 from the logs during the installation. Immediately while the temporary password
 is still in your clipboard, in the bottom left corner click the person icon and
 select 'Set Password' to change the admin password.
 
-### 4.2. Create Ethernet Bridge For Local Camera Network
+### 4.4. Create Ethernet Bridge For Local Camera Network
 
 If you are connecting your cameras to the Proxmox VE host via a local switch
 network on a different Ethernet port, it is necessary to add another network
@@ -350,7 +296,7 @@ Bridge: vmbr1
 IPv4: Static
 IPv4/CIDR: 192.168.1.100/24
 
-### 4.3. Configure NTP On Proxmox Host
+### 4.5. Configure NTP On Proxmox Host
 
 If you are avoiding connecting the cameras to the internet, you are likely going
 to want to set up a Network Time Protocol (NTP) server to periodically sync the
@@ -370,7 +316,7 @@ LXC. Log in and install 'ntpsec-ntpdate' using the command
 `sudo apt install ntpsec-ntpdate`. After it is finished, query the NTP server of
 the Proxmox host using the command `ntpdig 192.168.1.45`.
 
-### 4.4. Update Shared Memory
+### 4.6. Update Shared Memory
 
 TODO:
 There may be a warning at the bottom right of the screen that says something
@@ -384,14 +330,14 @@ To update the shared memory amount, you can add `--shm-size=2gb` to the `docker
 run` command that runs Frigate, or you can append it to the configuration file
 later on by adding to 'service.shm_size'.
 
-### 4.5. Users
+### 4.7. Users
 
 TODO:
 
-### 4.?. Reserve IP Address On Router
+### 4.8. Reserve IP Address On Router
 
-Open your router settings and locate the new Frigate LXC and reserve the desired
-IP address.
+Refer to [Reserve IP Address On Router](common-procedures.md#43-reserve-ip-address-on-router)
+reserve the desired IP address for the new Frigate LXC.
 
 ## 5. Configuration
 

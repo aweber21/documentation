@@ -7,11 +7,10 @@ This file contains all of the relevant information regarding TrueNAS.
 1\. [TrueNAS](#1-truenas)  
 1.1\. [Features](#11-features)  
 2\. [Pre-Installation](#2-pre-installation)  
-2.1\. [Installation Image and Media](#21-installation-image-and-media)  
-2.1.1\. [Acquire and Prepare Installation](#211-acquire-and-prepare-installation)  
-2.2\. [Create Virtual Machine](#22-create-virtual-machine)  
+2.1\. [Acquire and Prepare Image](#21-acquire-and-prepare-image)  
 3\. [Installation](#3-installation)  
-3.1\. [TrueNAS Installer](#31-truenas-installer)  
+3.1\. [Create Virtual Machine](#31-create-virtual-machine)  
+3.2\. [TrueNAS Installer](#32-truenas-installer)  
 4\. [Post-Installation](#4-post-installation)  
 4.1\. [Access Server Via Browser](#41-access-server-via-browser)  
 4.2\. [Users and Groups](#42-users-and-groups)  
@@ -54,22 +53,22 @@ installation.
 
 TrueNAS should run on any x86 system with a minimum of 8GB of RAM.
 
-### 2.1. Installation Image and Media
+### 2.1. Acquire and Prepare Image
 
-#### 2.1.1. Acquire and Prepare Installation
+Refer to [Virtualized Image](common-procedures.md#212-virtualized-iso) instructions for acquiring
+and preparing the TrueNAS image.
 
-Navigate to TrueNAS.com and find where to download the latest version. Instead
-of downloading to the PC, right click and copy the download's link address.
-Navigate back to Proxmox and find the local storage where ISO images can be
-downloaded. Click 'Download from URL' and paste the download URL. Query the URL
-and as long as everything looks good, click 'Download' to download the image to
-the Proxmox VE installation.
+## 3. Installation
 
-### 2.2. Create Virtual Machine
+This section highlights the installation process for a new TrueNAS
+installation.
 
-Once the TrueNAS ISO is downloaded, click 'Create VM' in the top right corner to
-create a virtual machine. Use the following settings for the VM while making
-sure 'Advanced' is checked for every menu:
+### 3.1. Create Virtual Machine
+
+Refer to [Create Virtual Machine](common-procedures.md#31-create-virtual-machine) instructions to
+create a TrueNAS virtual machine.
+
+Use the following specific settings for the VM:
 
 <ins>General</ins>
 Node: pve01
@@ -92,10 +91,6 @@ Defaults
 Cores: 2
 Type: x86-64-v2-AES (default)
 
-**NOTE**: Using 'Type: host' will have better performance, but sacrifices the
-ability to move between multiple hosts if necessary. The performance boost is
-negligible so portability is usually opted for.
-
 <ins>Memory</ins>
 Memory (MiB): 8192
 
@@ -107,12 +102,7 @@ Defaults
 <ins>Confirm</ins>
 Start after created: yes
 
-## 3. Installation
-
-This section highlights the installation process for a new TrueNAS
-installation.
-
-### 3.1. TrueNAS Installer
+### 3.2. TrueNAS Installer
 
 After the virtual machine is created, click on it and open the console to
 prepare to install TrueNAS. Wait until the 'TrueNAS Console Setup' appears.
@@ -145,18 +135,10 @@ TrueNAS installation.
 
 ### 4.1. Access Server Via Browser
 
-Navigate to the URL provided on the first boot to the TrueNAS installation.
-This URL is in the form of 'https://ip-address:8006/' and is used to access the
-server from another device. The first time this URL is accessed, your browser
-will most likely warn you that the connection is not private. This is expected.
-Click 'Show Details' or something similar and click the link that will allow you
-to 'Visit This Website'.
+Refer to [Access Server Via Browser](common-procedures.md#42-access-server-via-browser)
+to access the server.
 
-After navigating to the URL, create a new administrator account. The default
-administrator is 'truenas_admin'. Create the password and log in. If this is
-somehow bypassed by a reboot, navigate to the TrueNAS console and select 'Reset
-configuration to defaults' to prompt for creating an administrator account
-again.
+The URL will be: http, the node's IP address, and no port.
 
 ### 4.2. Users and Groups
 
@@ -377,8 +359,8 @@ reboot will not make enabling the QEMU Guest Agent take effect.
 
 ### 4.10. Reserve IP Address On Router
 
-Open your router settings and locate the new TrueNAS virtual machine and reserve
-the desired IP address.
+Refer to [Reserve IP Address On Router](common-procedures.md#43-reserve-ip-address-on-router)
+reserve the desired IP address for the new TrueNAS virtual machine.
 
 ## 5. Web Interface
 

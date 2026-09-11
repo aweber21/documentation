@@ -7,12 +7,11 @@ This file contains all of the relevant information regarding Home Assistant.
 1\. [Home Assistant](#1-home-assistant)  
 1.1\. [Features](#11-features)  
 2\. [Pre-Installation](#2-pre-installation)  
-2.1\. [Installation Image and Media](#21-installation-image-and-media)  
-2.1.1\. [Acquire and Prepare Installation](#211-acquire-and-prepare-installation)  
-2.2\. [Create Virtual Machine](#22-create-virtual-machine)  
-2.3\. [Proxmox VE Helper Script](#23-proxmox-ve-helper-script)  
+2.1\. [Acquire and Prepare Image](#21-acquire-and-prepare-image)  
 3\. [Installation](#3-installation)  
-3.1\. [Add Image To Virtual Machine](#31-add-image-to-virtual-machine)  
+3.1\. [Create Virtual Machine](#31-create-virtual-machine)  
+3.1.1\. [Add Image To Virtual Machine](#311-add-image-to-virtual-machine)  
+3.2\. [Proxmox Helper Script](#32-proxmox-helper-script)  
 4\. [Post-Installation](#4-post-installation)  
 4.1\. [Access Server Via Browser](#41-access-server-via-browser)  
 4.2\. [Users](#42-users)  
@@ -42,20 +41,22 @@ Assistant installation.
 Home Assistant can run on any hardware or virtual machine as an operating system
 or as a Docker container (with limitations).
 
-### 2.1. Installation Image and Media
+### 2.1. Acquire and Prepare Image
 
-#### 2.1.1. Acquire and Prepare Installation
+Refer to [Virtualized Image](common-procedures.md#212-virtualized-iso) instructions for acquiring
+and preparing the Home Assistant image.
 
-Navigate to 'http://www.home-assistant.io/installation/alternative' and find the
-link to download the 'KVM/Proxmox (.qcow2)' image. Instead of downloading to the
-PC, right click and copy the download's link address. Save it for use in a later
-step.
+### 3. Installation
 
-### 2.2. Create Virtual Machine
+This section highlights the installation process for a new Home Assistant
+installation.
 
-Once the image link is found is complete, click 'Create VM' in the top right
-corner to create a virtual machine. Use the following settings for the VM while
-making sure 'Advanced' is checked for every menu:
+### 3.1. Create Virtual Machine
+
+Refer to [Create Virtual Machine](common-procedures.md#31-create-virtual-machine) instructions to
+create a Home Assistant virtual machine.
+
+Use the following specific settings for the VM:
 
 <ins>General</ins>
 Node: pve01
@@ -80,10 +81,6 @@ Delete the SCSI drive and any other disks
 Cores: 2
 Type: x86-64-v2-AES (default)
 
-**NOTE**: Using 'Type: host' will have better performance, but sacrifices the
-ability to move between multiple hosts if necessary. The performance boost is
-negligible so portability is usually opted for.
-
 <ins>Memory</ins>
 Memory (MiB): 4096
 
@@ -96,22 +93,50 @@ Defaults
 <ins>Confirm</ins>
 Start after created: no
 
-### 2.3. Proxmox VE Helper Script
+#### 3.1.1. Add Image To Virtual Machine
 
-**NOTE**: It is unsafe to run random bash scripts you find on the internet as
-they can be harmful. Only run scripts that you are sure of and won't harm your
-computer. It is generally good practice to make sure to understand what the bash
-scripts are actually doing under the hood before running them.
+Navigate to the shell of the Proxmox VE node that the Home Assistant virtual
+machine was installed to. In the node's console, use the command
+`wget link-to-qcow2-file` to download the image using the link acquired in a
+previous step.
 
-Proxmox VE Helper Scripts have had mixed opinions since it encourages unsafe
-practice, however most deem them to be safe and actually very helpful.
+**NOTE**: Feel free to store the image in a dedicated image storage location on
+the host if desired. For example, the 'local' storage 'Import' menu can be found
+at '/var/lib/vz/import' so any images added there will appear in the Proxmox
+GUI.
 
-Navigate to 'community-scripts.org' to find a list of Proxmox VE Helper Scripts.
-Search for "home assistant" and click on the 'Home Assistant OS' VM option. In
-the pop-up screen under 'Install', you'll find a bash command that can be run in
-a Proxmox VE node's shell to install a Home Assistant VM.
+Once the file is downloaded, expand the compressed image using
+`unxz /path/to/qcow2.xz` using the newly downloaded file.
 
-Use the following options for the install script:
+**NOTE**: This may take a couple of minutes.
+
+After the image is successfully downloaded and expanded, import the image from
+the host to the virtual machine using
+`qm importdisk vm-id /path/to/qcow2 efi-location`. For example,
+`qm importdisk 101 haos_ova-18.2.qcow2 local-lvm`.
+
+Once the image is imported to the virtual machine, navigate to the Home
+Assistant VM's 'Hardware' tab. Select the 'Unused Disk' and click the 'Edit'
+button. In the 'Add: Unused Disk' menu, enable 'Discard' if you're using an SSD.
+Click 'Add' to add the disk.
+
+Navigate to the VM's 'Options' tab. Select 'Boot Order' and click the 'Edit'
+button. Check the newly created drive (scsi0) and unselect the rest.
+
+Start the Home Assistant VM to complete installation.
+
+**NOTE**: The manual process was described above. It is also possible to
+download and expand the Home Assistant image and store it in
+'/var/lib/vz/import'. This can then be used when creating the Home Assistant VM
+on the 'Disks' page by removing all drives and pressing 'Import' in the bottom
+left and proceeding to select the Home Assistant image for the 'scsi0' drive.
+
+### 3.2. Proxmox Helper Script
+
+Refer to [Proxmox Helper Scripts](common-procedures.md#33-proxmox-helper-scripts)
+if desired instead.
+
+Use the following specific settings for the helper script:
 
 <ins>Homeassistant OS VM</ins>
 Yes
@@ -167,49 +192,6 @@ Yes
 <ins>Image Cache</ins>
 Yes
 
-### 3. Installation
-
-This section highlights the installation process for a new Home Assistant
-installation.
-
-#### 3.1. Add Image To Virtual Machine
-
-Navigate to the shell of the Proxmox VE node that the Home Assistant virtual
-machine was installed to. In the node's console, use the command
-`wget link-to-qcow2-file` to download the image using the link acquired in a
-previous step.
-
-**NOTE**: Feel free to store the image in a dedicated image storage location on
-the host if desired. For example, the 'local' storage 'Import' menu can be found
-at '/var/lib/vz/import' so any images added there will appear in the Proxmox
-GUI.
-
-Once the file is downloaded, expand the compressed image using
-`unxz /path/to/qcow2.xz` using the newly downloaded file.
-
-**NOTE**: This may take a couple of minutes.
-
-After the image is successfully downloaded and expanded, import the image from
-the host to the virtual machine using
-`qm importdisk vm-id /path/to/qcow2 efi-location`. For example,
-`qm importdisk 101 haos_ova-18.2.qcow2 local-lvm`.
-
-Once the image is imported to the virtual machine, navigate to the Home
-Assistant VM's 'Hardware' tab. Select the 'Unused Disk' and click the 'Edit'
-button. In the 'Add: Unused Disk' menu, enable 'Discard' if you're using an SSD.
-Click 'Add' to add the disk.
-
-Navigate to the VM's 'Options' tab. Select 'Boot Order' and click the 'Edit'
-button. Check the newly created drive (scsi0) and unselect the rest.
-
-Start the Home Assistant VM to complete installation.
-
-**NOTE**: The manual process was described above. It is also possible to
-download and expand the Home Assistant image and store it in
-'/var/lib/vz/import'. This can then be used when creating the Home Assistant VM
-on the 'Disks' page by removing all drives and pressing 'Import' in the bottom
-left and proceeding to select the Home Assistant image for the 'scsi0' drive.
-
 ## 4. Post-Installation
 
 This section highlights the recommended post-installation steps for a new
@@ -217,12 +199,10 @@ Home Assistant installation.
 
 ### 4.1. Access Server Via Browser
 
-Navigate to the URL provided after the completion of the installation script.
-This URL is in the form of 'https://homeassistant.local:8123/' and is used to
-access the server from another device. The first time this URL is accessed,
-your browser may warn you that the connection is not private. This is expected.
-Click 'Show Details' or something similar and click the link that will allow you
-to 'Visit This Website'.
+Refer to [Access Server Via Browser](common-procedures.md#42-access-server-via-browser)
+to access the server.
+
+The URL will be: http, the node's IP address, and a default port of 8123.
 
 After navigating to the URL, press 'Create my smart home' to continue with the
 onboarding.
@@ -256,8 +236,8 @@ another device.
 
 ### 4.3. Reserve IP Address On Router
 
-Open your router settings and locate the new Home Assistant virtual machine and
-reserve the desired IP address.
+Refer to [Reserve IP Address On Router](common-procedures.md#43-reserve-ip-address-on-router)
+reserve the desired IP address for the new Home Assistant virtual machine.
 
 ## 5. Web Interface
 

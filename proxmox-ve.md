@@ -7,16 +7,14 @@ This file contains all of the relevant information regarding Proxmox VE.
 1\. [Proxmox VE](#1-proxmox-ve)  
 1.1\. [Features](#11-features)  
 2\. [Pre-Installation](#2-pre-installation)  
-2.1\. [Installation Image and Media](#21-installation-image-and-media)  
-2.1.1\. [Acquire and Prepare Installation](#211-acquire-and-prepare-installation)  
-2.1.2\. [Boot to Proxmox VE Installation Media](#212-boot-to-proxmox-ve-installation-media)  
+2.1\. [Acquire and Prepare Image](#21-acquire-and-prepare-installation)  
 3\. [Installation](#3-installation)  
 3.1\. [Graphical Installer](#31-graphical-installer)  
 3.2\. [OS Drive](#32-os-drive)  
 3.3\. [Location, Time Zone, and Keyboard Layout](#33-location-time-zone-and-keyboard-layout)  
 3.4\. [Administration Password and Email Address](#34-administration-password-and-email-address)  
 3.5\. [Network Configuration](#35-network-configuration)  
-3.6\. [Confirm and Install](#35-confirm-and-install)  
+3.6\. [Confirm and Install](#36-confirm-and-install)  
 4\. [Post-Installation](#4-post-installation)  
 4.1\. [Access Server Via Browser](#41-access-server-via-browser)  
 4.2\. [Fix Repositories](#42-fix-repositories)  
@@ -24,7 +22,7 @@ This file contains all of the relevant information regarding Proxmox VE.
 4.4\. [Enable IOMMU](#44-enable-iommu)  
 4.5\. [Update GRUB For UEFI](#45-update-grub-for-uefi)  
 4.6\. [Adjust Power Settings For Laptops](#46-adjust-power-settings-for-laptops)
-4.7\. [Reserve IP Address On Router](#46-reserve-ip-address-on-router)  
+4.7\. [Reserve IP Address On Router](#47-reserve-ip-address-on-router)  
 5\. [Web Interface](#5-web-interface)  
 5.1\. [Cluster, Nodes, Networks, and Storage](#51-cluster-nodes-networks-and-storage)  
 
@@ -64,24 +62,10 @@ with a minimum of 2GB RAM for the OS and Proxmox VE services. For PCI(e)
 passthrough, a CPU with VT-d/AMD-d CPU flag is needed. A wired NIC, such as
 ethernet, is ideal for serving a network.
 
-### 2.1. Installation Image and Media
+### 2.1. Acquire and Prepare Image
 
-#### 2.1.1. Acquire and Prepare Installation
-
-Go to "https://www.proxmox.com/en/downloads/proxmox-virtual-environment/iso" to
-download a Proxmox VE image. The desired file will have the name:
-"proxmox-ve_#.#-#.iso"
-
-Download Rufus to write ISO to USB Drive. Select the Proxmox VE ISO and the USB
-Drive while keeping all other settings as default. A warning will appear
-acknowledging that the ISO is a ISOHybrid image, meaning DD image writing mode
-will be enforced. Click start to install ISO to the USB Drive.
-
-#### 2.1.2. Boot to Proxmox VE Installation Media
-
-Insert the USB Drive with the Proxmox VE ISO installed into the system you want
-to install Proxmox VE on. Go into BIOS and set the Proxmox VE USB Drive as the
-primary boot device.
+Refer to [Bare Metal Image](common-procedures.md#211-bare-metal-iso)
+instructions for acquiring and preparing the Proxmox VE image.
 
 While in the BIOS, make sure to enable all virtualization settings necessary for
 a server, such as VT-d for PCI(e) passthrough and AHCI for the SATA controller.
@@ -168,12 +152,10 @@ Proxmox VE system to properly configure the server.
 
 ### 4.1. Access Server Via Browser
 
-Navigate to the URL provided on the first boot to the Proxmox VE installation.
-This URL is in the form of 'https://ip-address:8006/' and is used to access the
-server from another device. The first time this URL is accessed, your browser
-will most likely warn you that the connection is not private. This is expected.
-Click 'Show Details' or something similar and click the link that will allow you
-to 'Visit This Website'.
+Refer to [Access Server Via Browser](common-procedures.md#42-access-server-via-browser)
+to access the server.
+
+The URL will be: http, the node's IP address, and a default port of 8006.
 
 After navigating to the URL, login as 'root' with the root password you
 configured during the installation. The realm set to 'Linux PAM standard
@@ -265,8 +247,8 @@ the laptop itself is needed.
 
 ### 4.7. Reserve IP Address On Router
 
-Open your router settings and locate the new Proxmox VE installation and
-reserve the same IP address that was specified during the installation process.
+Refer to [Reserve IP Address On Router](common-procedures.md#43-reserve-ip-address-on-router)
+reserve the desired IP address for the new Proxmox VE system.
 
 ## 5. Web Interface
 
