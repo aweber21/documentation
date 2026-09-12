@@ -189,14 +189,47 @@ share if desired.
 
 Click finish to complete onboarding and show the default dashboard.
 
-### 4.2. Users
+### 4.2. Terminal Access
+
+In order to gain terminal access to the Home Assistant installation, it is
+necessary to download the "Advanced SSH & Web Terminal" application.
+
+**NOTE**: This will give you terminal access to Home Assistant installation
+directly. This is different than the VM shell that is accessed from the Proxmox
+web interface.
+
+Navigate to 'Settings' in the left sidebar and select 'Apps'. This will show all
+of the currently installed applications. In the bottom right, select the
+'Install app' and search for "Advanced SSH & Web Terminal". Select in and click
+the 'Install' button. After the installation is complete, you should now see a
+"Configuration" tab and a "Log" tab at the top of the screen.
+
+On the "Info" tab, the right side should now have options for the Terminal
+application. Select what is desired before configuring.
+
+It is necessary to configure this application before using it by navigating to
+the "Configuration" tab. Create an SSH username and password to login. This will
+be used for both SSH and Terminal access from Home Assistant. If you would like
+to fall back to bash instead of using zsh, turn off zsh. Also, it is recommended
+to disable SSH for security reasons if it will not be used regularly. This is
+done by clearing the port number that will be used for SSH.
+
+Navigate back to the "Info" tab and select the 'Start' button to launch the app.
+Click 'Open Web UI' to access the terminal.
+
+**NOTE**: You will be logged in as root within this shell. It is not recommended
+to add a new user since this is just accessing the Docker container. So, any
+repos will just need to be stored in root's home directory instead of any admin
+account home directory like other services.
+
+### 4.3. Users
 
 Navigate to 'People' under 'Settings' when logged in as an administrator and add
 the necessary users by clicking 'Add person' in the bottom right of the page.
 Make sure to 'Allow login' by username and password to let that person login on
 another device.
 
-### 4.3. Reserve IP Address On Router
+### 4.4. Reserve IP Address On Router
 
 Refer to [Reserve IP Address On Router](common-procedures.md#43-reserve-ip-address-on-router)
 reserve the desired IP address for the new Home Assistant virtual machine.
