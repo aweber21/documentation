@@ -20,9 +20,11 @@ This file contains all of the relevant information regarding Frigate.
 4.4\. [Create Ethernet Bridge For Local Camera Network](#44-create-ethernet-bridge-for-local-camera-network)  
 4.5\. [Configure NTP On Proxmox Host](#45-configure-ntp-on-proxmox-host)  
 4.6\. [Update Shared Memory](#46-update-shared-memory)  
-4.7\. [Users](#47-users)  
-4.8\. [Reserve IP Address On Router](#48-reserve-ip-address-on-router)  
+4.7\. [Configure Hardware Acceleration](#47-configure-hardware-acceleration)  
+4.8\. [Users](#48-users)  
+4.9\. [Reserve IP Address On Router](#49-reserve-ip-address-on-router)  
 5\. [Web Interface and Configuration](#5-web-interface-and-configuration)  
+5.1\. [Home Assistant Integration](#51-home-assistant-integration)  
 
 ## 1. Frigate
 
@@ -250,9 +252,11 @@ to access the server.
 The URL will be: https, the node's IP address, and a default port of 8971.
 
 After navigating to the URL, login as 'admin' with the admin password recorded
-from the logs during the installation. Immediately while the temporary password
-is still in your clipboard, in the bottom left corner click the person icon and
-select 'Set Password' to change the admin password.
+from the logs during the installation.
+
+Immediately make a new "frigate_admin" account by navigating to the "Settings"
+menu after clicking the cog in the bottom left. Navigate to "Users" and click
+"Add User" in the top right. Make sure the role is set to "Admin".
 
 ### 4.4. Create Ethernet Bridge For Local Camera Network
 
@@ -318,7 +322,6 @@ the Proxmox host using the command `ntpdig 192.168.1.45`.
 
 ### 4.6. Update Shared Memory
 
-TODO:
 There may be a warning at the bottom right of the screen that says something
 along the lines of "/dev/shm allocation should be increased". This is important
 as this value should be increased to be able to support multiple cameras. There
@@ -326,15 +329,32 @@ is a specific formula on the Frigate Installation page, but to be safe you can
 overallocate to prevent crashes. For multiple cameras with higher resolutions,
 you'll likely want to do at least 1GB.
 
-To update the shared memory amount, you can add `--shm-size=2gb` to the `docker
-run` command that runs Frigate, or you can append it to the configuration file
-later on by adding to 'service.shm_size'.
+To update the shared memory amount, add `shm_size: "256mb"` to the docker
+compose file under services.frigate.
 
-### 4.7. Users
+### 4.7. Configure Hardware Acceleration
 
-TODO:
+To utilize hardware that was passed through to the LXC in the Frigate docker
+container, you must map it in the docker compose.
 
-### 4.8. Reserve IP Address On Router
+For OpenVINO's device "/dev/dri/renderD128", add
+`devices:
+    - /dev/dri/renderD128:/dev/dri/renderD128`
+
+Navigate to the Frigate documentation to find the "Object Detectors" page. Here
+you will find the detectors recommended for your hardware. For an 11th Gen
+Intel iGPU, YOLOv9 is recommended. The command to run is provided in the
+documentation. It's recommended also to start at a model size of "small" and an
+image size of "320" and adjust as needed.
+
+### 4.8. Users
+
+Navigate to the "Settings" menu after clicking the cog in the bottom left when
+logged in as an administrator and add the necessary users by clicking 'Add User'
+in the top right of the page. Make sure to set the role to "Viewer" if you don't
+want them to have any admin privileges.
+
+### 4.9. Reserve IP Address On Router
 
 Refer to [Reserve IP Address On Router](common-procedures.md#43-reserve-ip-address-on-router)
 reserve the desired IP address for the new Frigate LXC.
