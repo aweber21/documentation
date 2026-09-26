@@ -23,7 +23,7 @@ This file contains all of the relevant information regarding Frigate.
 4.7\. [Configure Hardware Acceleration](#47-configure-hardware-acceleration)  
 4.8\. [Users](#48-users)  
 4.9\. [Reserve IP Address On Router](#49-reserve-ip-address-on-router)  
-5\. [Web Interface and Configuration](#5-web-interface-and-configuration)  
+5\. [Configuration](#5-configuration)  
 5.1\. [Home Assistant Integration](#51-home-assistant-integration)  
 
 ## 1. Frigate
@@ -82,7 +82,7 @@ Use the following specific settings for the LXC:
 
 <ins>General</ins>
 Node: pve02
-VM ID: 100
+CT ID: 100
 Name: frigate
 Unprivileged container: yes
 Provide a password

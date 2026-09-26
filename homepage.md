@@ -73,7 +73,7 @@ Use the following specific settings for the LXC:
 
 <ins>General</ins>
 Node: pve01
-VM ID: 136
+CT ID: 136
 Name: homepage
 Unprivileged container: yes
 Provide a password
