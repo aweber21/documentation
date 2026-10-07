@@ -41,6 +41,8 @@ installation.
 Homepage can run on Docker, Kubernetes, UNRAID, or built directly from source to
 run in an Linux Containter (LXC) or on a bare metal operating system.
 
+This document will cover installation for an LXC on Proxmox.
+
 There exists a Proxmox VE Helper Script, if desired.
 
 ### 2.1. Acquire and Prepare Image

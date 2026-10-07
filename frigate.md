@@ -52,8 +52,11 @@ installation.
 
 Frigate is primarily designed to run in a Docker container on bare metal. Many
 have also found success in running Frigate in a Docker container in a Proxmox
-Virtual Machine or Linux Container (LXC). This document will cover installation
-for an LXC on Proxmox.
+Virtual Machine or Linux Container (LXC).
+
+This document will cover installation for an LXC on Proxmox.
+
+There exists a Proxmox VE Helper Script, if desired.
 
 ### 2.1. Acquire and Prepare Image
 
