@@ -45,7 +45,7 @@ There exists a Proxmox VE Helper Script, if desired.
 
 ### 2.1. Acquire and Prepare Image
 
-The recommended operating system to run Frigate on is
+The recommended operating system to run Homepage on is
 'Debian 12 Bookworm (standard)'. Proxmox comes with a LXC Container Template
 called 'debian-12-standard' and this is sufficient for the Homepage LXC.
 
@@ -60,7 +60,7 @@ installation.
 **NOTE**: Some of these steps will likely have been completed for you if the
 Proxmox VE Helper Script was used.
 
-Begin by clicking 'Start' in the top right corner of the Frigate LXC page.
+Begin by clicking 'Start' in the top right corner of the Homepage LXC page.
 Navigate to the console and login using 'root' and the password provided when
 creating the LXC.
 
