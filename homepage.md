@@ -48,8 +48,8 @@ There exists a Proxmox VE Helper Script, if desired.
 ### 2.1. Acquire and Prepare Image
 
 The recommended operating system to run Homepage on is
-'Debian 12 Bookworm (standard)'. Proxmox comes with a LXC Container Template
-called 'debian-12-standard' and this is sufficient for the Homepage LXC.
+'Debian 13 Bookworm (standard)'. Proxmox comes with a LXC Container Template
+called 'debian-13-standard' and this is sufficient for the Homepage LXC.
 
 Refer to [Linux Container Template](common-procedures.md#214-linux-container-template)
 instructions to download a Debian LXC template.
@@ -61,10 +61,6 @@ installation.
 
 **NOTE**: Some of these steps will likely have been completed for you if the
 Proxmox VE Helper Script was used.
-
-Begin by clicking 'Start' in the top right corner of the Homepage LXC page.
-Navigate to the console and login using 'root' and the password provided when
-creating the LXC.
 
 ### 3.1. Create Linux Container
 
@@ -92,8 +88,8 @@ Disk size (GiB): 16
 Cores: 1
 
 <ins>Memory</ins>
-Memory (MiB): 2048
-Swap (MiB): 2048
+Memory (MiB): 1024
+Swap (MiB): 1024
 
 <ins>Network</ins>
 IPv4: DHCP
@@ -211,6 +207,10 @@ Yes
 
 This section highlights the recommended post-installation steps for a new
 Homepage installation.
+
+Begin by clicking 'Start' in the top right corner of the Homepage LXC page.
+Navigate to the console and login using 'root' and the password provided when
+creating the LXC.
 
 ### 4.1. Debian Container Configuration
 

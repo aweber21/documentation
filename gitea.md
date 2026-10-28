@@ -51,8 +51,8 @@ Container (LXC) on Proxmox.
 ### 2.1. Acquire and Prepare Image
 
 The recommended operating system to run Gitea on is
-'Debian 12 Bookworm (standard)'. Proxmox comes with a LXC Container Template
-called 'debian-12-standard' and this is sufficient for the Gitea LXC.
+'Debian 13 Bookworm (standard)'. Proxmox comes with a LXC Container Template
+called 'debian-13-standard' and this is sufficient for the Gitea LXC.
 
 Refer to [Linux Container Template](common-procedures.md#214-linux-container-template)
 instructions to download a Debian LXC template.

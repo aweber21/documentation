@@ -61,8 +61,8 @@ There exists a Proxmox VE Helper Script, if desired.
 ### 2.1. Acquire and Prepare Image
 
 The recommended operating system to run Frigate on is
-'Debian 12 Bookworm (standard)'. Proxmox comes with a LXC Container Template
-called 'debian-12-standard' and this is sufficient for the Frigate LXC.
+'Debian 13 Bookworm (standard)'. Proxmox comes with a LXC Container Template
+called 'debian-13-standard' and this is sufficient for the Frigate LXC.
 
 Refer to [Linux Container Template](common-procedures.md#214-linux-container-template)
 instructions to download a Debian LXC template.
@@ -71,10 +71,6 @@ instructions to download a Debian LXC template.
 
 This section highlights the installation process for a new Frigate system using
 a Proxmox VE Linux Container.
-
-Begin by clicking 'Start' in the top right corner of the Frigate LXC page.
-Navigate to the console and login using 'root' and the password provided when
-creating the LXC.
 
 ### 3.1. Create Linux Container
 
@@ -196,6 +192,10 @@ if desired instead.
 
 This section highlights the recommended post-installation steps for the new
 Frigate system.
+
+Begin by clicking 'Start' in the top right corner of the Frigate LXC page.
+Navigate to the console and login using 'root' and the password provided when
+creating the LXC.
 
 ### 4.1. Debian Container Configuration
 
