@@ -19,9 +19,10 @@ This file contains all of the relevant information regarding common procedures.
 4\. [Post-Installation](#4-post-installation)  
 4.1\. [Debian Container Configuration](#41-debian-container-configuration)  
 4.1.1\. [Update System](#411-update-system)  
-4.1.2\. [Create New User](#412-create-new-user)  
-4.1.2.1\. [Install And Configure Sudo](#4121-install-and-configure-sudo)  
-4.1.3\. [Install Docker](#413-install-docker)  
+4.1.2\. [Update Time Zone](#412-update-time-zone)  
+4.1.3\. [Create New User](#412-create-new-user)  
+4.1.3.1\. [Install And Configure Sudo](#4121-install-and-configure-sudo)  
+4.1.4\. [Install Docker](#413-install-docker)  
 4.2\. [Access Server Via Browser](#42-access-server-via-browser)  
 4.3\. [Reserve IP Address On Router](#43-reserve-ip-address-on-router)  
 
@@ -265,7 +266,14 @@ Once booted into the Debian LXC, run a standard `apt update && apt upgrade -y`
 to update the container. This may take a few minutes to complete. After the
 system upgrade is complete, reboot if prompted to.
 
-#### 4.1.2. Create New User
+#### 4.1.2. Update Time Zone
+
+If necessary, you may need to update the time zone if it is not correct after
+installation. To do this, run the command
+`timedatectl set-timezone _desired-timezone_`. The time zone will be in the form
+similar to "America/Chicago".
+
+#### 4.1.3. Create New User
 
 It is strongly recommended to use Debian from a non-root account. This is good
 practice to prevent irreversible commanding by accident, and to only use
@@ -283,7 +291,7 @@ it'll point to the current shell to be used on login, likely '/bin/sh' by
 default. Change this to '/bin/bash' to use bash, or just type `bash` after
 logging in to enter the 'bash' shell.
 
-##### 4.1.2.1. Install And Configure Sudo
+##### 4.1.3.1. Install And Configure Sudo
 
 Install `sudo` by executing `apt install sudo`. Wait for the installation to
 complete.
@@ -296,7 +304,7 @@ done by the following command:
 
 `echo 'debian_admin    ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/user`
 
-#### 4.1.3. Install Docker
+#### 4.1.4. Install Docker
 
 **NOTE**: Log out of root and log in as the new user if one was created.
 
