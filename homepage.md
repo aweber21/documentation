@@ -17,6 +17,9 @@ This file contains all of the relevant information regarding Homepage.
 4.3\. [Access Server Via Browser](#43-access-server-via-browser)  
 4.4\. [Reserve IP Address On Router](#44-reserve-ip-address-on-router)  
 5\. [Customization](#5-customization)  
+5.1\. [Proxmox API Token](#51-proxmox-api-token)  
+5.2\. [TrueNAS API Token](#52-truenas-api-token)  
+5.3\. [Gitea API Token](#53-gitea-api-token)  
 
 ## 1. Homepage
 
@@ -280,3 +283,73 @@ maintain access from other devices through that IP address.
 ## 5. Customization
 
 This section highlights the customization of the Homepage service.
+
+### 5.1. Proxmox API Token
+
+In order to get Proxmox information to use with Homepage, you must create an API
+Token.
+
+In the Homepage documentation, it walks through the process to add a new "Group"
+and new "User" to create an API Token with read-only access. This can be done if
+desired, but is no longer necessary since Proxmox API Tokens can be created with
+"Privilege Separation". This means that API Token permissions are separated from
+the user of the API Tokens. In other words, the permission allowed through the
+API Token is no longer tied to the user and group, but now to the API Token
+itself.
+
+To create an API Token, navigate to your Proxmox "Datacenter" and go to the "API
+Tokens" menu under the "Permissions" folder. Click the 'Add' button and add a
+new token. Select the desired user and provide a "Token ID" that describes the
+purpose of the key, like "homepage". Make sure "Privilege Separation" is
+selected and click the 'Add' button.
+
+<ins>Add: Token</ins>
+User: _Desired User_@pam
+Token ID: _Desired Name_
+Privilege Separation: yes
+
+To modify the permissions of the API Token, click the "Permissions" folder and
+click "Add" to add an "API Token Permission". For Homepage, use the following
+options to allow read-only access through this API Token.
+
+<ins>Add: API Token Permission</ins>
+Path: /
+API Token: _Desired Token_
+Role: PVEAuditor
+Propagate: yes
+
+### 5.2. TrueNAS API Token
+
+In order to get TrueNAS information to use with Homepage, you must create an API
+Token.
+
+To create an API Token, navigate to the "User API Keys" menu. This can be found
+by logging in to the respective account and clicking the user in the top right
+and selecting the 'My API Keys' button. Click the 'Add' button in the top right
+and give a "Name" that describes the purpose of the key, like "homepage". Make
+sure to select "Non-expiring".
+
+<ins>Add API Key</ins>
+Name: _Desired Name_
+Username: _Desired User_
+Non-expiring: yes
+
+### 5.3. Gitea API Token
+
+In order to get Gitea information to use with Homepage, you must create an API
+Token.
+
+To create an API Token, navigate to the "Applications" menu under "User
+Settings". This can be found by logging in to the respective account and
+clicking the user in the top right and selecting the 'Settings' button. Give a
+"Token Name" that describes the purpose of the key, like "homepage". Homepage
+only needs the "notifications", "repository", and "issue" permissions, so select
+these and generate the token.
+
+<ins>Manage Access Tokens</ins>
+Token Name: _Desired Name_
+Repository and Organization Access: All (public, private, and limited)
+issue: Read
+notification: Read
+repository: Read
+All others: No Access
