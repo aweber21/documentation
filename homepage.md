@@ -18,8 +18,9 @@ This file contains all of the relevant information regarding Homepage.
 4.4\. [Reserve IP Address On Router](#44-reserve-ip-address-on-router)  
 5\. [Configuration](#5-configuration)  
 5.1\. [Proxmox API Token](#51-proxmox-api-token)  
-5.2\. [TrueNAS API Token](#52-truenas-api-token)  
-5.3\. [Gitea API Token](#53-gitea-api-token)  
+5.2\. [Proxmox Backup Server API Token](#52-proxmox-backup-server-api-token)  
+5.3\. [TrueNAS API Token](#53-truenas-api-token)  
+5.4\. [Gitea API Token](#54-gitea-api-token)  
 
 ## 1. Homepage
 
@@ -304,7 +305,7 @@ purpose of the key, like "homepage". Make sure "Privilege Separation" is
 selected and click the 'Add' button.
 
 <ins>Add: Token</ins>
-User: _Desired User_@pam
+User: _Desired User_@_Desired Realm_
 Token ID: _Desired Name_
 Privilege Separation: yes
 
@@ -318,7 +319,33 @@ API Token: _Desired Token_
 Role: PVEAuditor
 Propagate: yes
 
-### 5.2. TrueNAS API Token
+### 5.2. Proxmox Backup Server API Token
+
+In order to get Proxmox Backup Server information to use with Homepage, you
+must create an API Token.
+
+The Proxmox Backup Server process is very similar to the normal Proxmox API
+Token process. To create an API Token, navigate to the Proxmox Backup Server
+"Access Control" menu and go to the "API Tokens" tab. Click the 'Add' button
+to add a new token. Select the desired user and provide a "Token ID" that
+describes the purpose of the key, like "homepage". Click the 'Add' button to
+create the token.
+
+<ins>Add: Token</ins>
+User: _Desired User_@_Desired Realm_
+Token ID: _Desired Name_
+
+To modify the permissions of the API Token, click the "Permissions" tab and
+click "Add" to add an "API Token Permission". For Homepage, use the following
+options to allow read-only access through this API Token.
+
+<ins>Add: API Token Permission</ins>
+Path: /
+API Token: _Desired Token_
+Role: Auditor
+Propagate: yes
+
+### 5.3. TrueNAS API Token
 
 In order to get TrueNAS information to use with Homepage, you must create an API
 Token.
@@ -334,7 +361,7 @@ Name: _Desired Name_
 Username: _Desired User_
 Non-expiring: yes
 
-### 5.3. Gitea API Token
+### 5.4. Gitea API Token
 
 In order to get Gitea information to use with Homepage, you must create an API
 Token.
