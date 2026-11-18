@@ -219,10 +219,6 @@ is a "Datastores" section on the bottom of the sidebar that will bring you to a
 menu with a list of the configured datastores. To create a new datastore, click
 the 'Add Datastore' button the sidebar.
 
-**NOTE**: It is recommended to create separate datastores for each Proxmox VE
-node you are planning to back up. The reason for this is so that LXC IDs and
-VM IDs do not clash if the same is used on multiple nodes.
-
 <ins>Add: Datastore</ins>
 Name: _Desired Name_
 Datastore Type: Local (if the datastore is on the same drive as the OS)
@@ -253,6 +249,17 @@ Max. Depth: Full
 Schedule: _Desired Schedule_
 Skip Verified: yes
 Re-Verify After: 30 days
+
+**NOTE**: If you are backing up multiple nodes, LXC and VM IDs will clash. To
+combat this you can either create separate datastores for each Proxmox VE node,
+or you can utilize namespaces within a datastore. The latter is preferred since
+the combined storage of backups will be able to be tracked together instead of
+separately.
+
+In order to set up a namespace, navigate to the "Content" tab under your
+datastore's menu. Click the 'Add Namespace' button in the top right and specify
+the "Parent Namespace" and the new "Namespace Name". Click create to create the
+namespace.
 
 ### 5.2. Proxmox Backup Server API Token
 
@@ -302,6 +309,7 @@ Server: _Desired Server_
 Username: _Desired User_@_Desired Realm_
 Password: _Username's Password_
 Datastore: _Desired Datastore_
+Namespace: _Desired Namespace_
 Fingerprint: _Proxmox Backup Server Fingerprint_
 
 **NOTE**: If you used an API Token instead of a user like shown above, set the
