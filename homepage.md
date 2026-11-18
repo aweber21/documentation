@@ -16,7 +16,7 @@ This file contains all of the relevant information regarding Homepage.
 4.2\. [Install Homepage](#42-install-homepage)  
 4.3\. [Access Server Via Browser](#43-access-server-via-browser)  
 4.4\. [Reserve IP Address On Router](#44-reserve-ip-address-on-router)  
-5\. [Customization](#5-customization)  
+5\. [Configuration](#5-configuration)  
 5.1\. [Proxmox API Token](#51-proxmox-api-token)  
 5.2\. [TrueNAS API Token](#52-truenas-api-token)  
 5.3\. [Gitea API Token](#53-gitea-api-token)  
@@ -280,9 +280,9 @@ reserve the desired IP address for the new Homepage LXC.
 **NOTE**: Make sure to update /opt/homepage/.env with the newly reserved IP to
 maintain access from other devices through that IP address.
 
-## 5. Customization
+## 5. Configuration
 
-This section highlights the customization of the Homepage service.
+This section highlights the configuration of the Homepage service.
 
 ### 5.1. Proxmox API Token
 

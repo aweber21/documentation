@@ -155,7 +155,7 @@ Proxmox VE system to properly configure the server.
 Refer to [Access Server Via Browser](common-procedures.md#42-access-server-via-browser)
 to access the server.
 
-The URL will be: http, the node's IP address, and a default port of 8006.
+The URL will be: https, the node's IP address, and a default port of 8006.
 
 After navigating to the URL, login as 'root' with the root password you
 configured during the installation. The realm set to 'Linux PAM standard
@@ -165,7 +165,7 @@ changed.
 ### 4.2. Fix Repositories
 
 When you first log in to Proxmox VE via a web browser, you can see errors in the
-task list at the bottom of the screen that say 'Update package database' is
+task list at the bottom of the screen that says 'Update package database' is
 throwing an error.
 
 To fix this, click on the Proxmox VE system on the lefthand side menu to open
@@ -227,7 +227,7 @@ maintain functionality when the laptop lid is closed. Navigate to
 `/etc/systemd/logind.conf` and uncomment and edit the following lines:
 
 - HandleLidSwitch=ignore
-- HandleListSwitchExternalPower=ignore
+- HandleLidSwitchExternalPower=ignore
 - HandleLidSwitchDocked=ignore
 
 To apply the new settings, restart the systemd service by executing
