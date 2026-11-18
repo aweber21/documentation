@@ -229,6 +229,10 @@ Datastore Type: Local (if the datastore is on the same drive as the OS)
 Backing Path: _Desired Path_
 GC Schedule: _Desired Schedule_
 Prune Schedule: _Desired Schedule_
+Prune Options Tab: _Desired Prune Options_
+
+**NOTE**: Make sure to set your Prune Options, or else your prune job will have
+warnings and only keep the most recent snapshot.
 
 **NOTE**: Garbage Collection (GC) and Prune is highly recommended to minimize
 storage usage. Pruning cleans up the backup index files while Garbage Collection
